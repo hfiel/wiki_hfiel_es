@@ -1,0 +1,54 @@
+!!Registro en el admin
+NOTA: ver el código fuente de la página para no tener problemas con los __
+
+Cuando ya tenemos acceso al admin del proyecto, para poder gestionar nuestros modelos desde el mismo es necesario registrarlos previamente.
+
+Esto se hace mediante la configuracion del interfaz de administracion de la aplicacion -no la del proyecto- (ver como se registra en la segunda parte del tutorial, [https://docs.djangoproject.com/en/1.8/intro/tutorial02/#make-the-poll-app-modifiable-in-the-admin])
+
+
+Por ejemplo, si tengo dos modelos News y Event:
+
+ from .models import News, Event
+ 
+ 
+ admin.site.register(News)
+ admin.site.register(Event)
+
+
+!!como hacer que en la administración del sitio aparezca el título de cada objeto
+si nos vamos al admin ahora mismo, ya podemos crear objetos News y Event, pero todos aparecen listados como objetos genéricos (no podemos saber cual es cual sin entrar dentro de cada uno).
+
+Para arreglarlo, vamos a modificar los modelos, y le agregaremos un método que devuelve el título (suponemos que queremos mostrar el campo title del objeto). Este cambio lo haremos en el objeto "madre" del que hereden los dos (o en cada uno por separado si no están heredando, lo cual no debería ser así):
+
+ 
+    def __str__(self):
+        return self.title
+
+
+!!OJOJOJO: Unicode
+
+esto de aqui arriba esta muy bonito, pero sólo funciona en python 3...¿y en pyhton 2?
+
+Pues encontramos nuestra primera diferencia entre versiones:
+
+en pyhton2 tendríamos que usar
+
+ __unicode__(self)
+
+
+¿como hacemos código que sea a la vez valido para 2 y 3?
+
+incorporamos los siguientes modulos:
+
+ from __future__ import unicode_literals
+ from django.utils.encoding import python_2_unicode_compatible
+
+
+Y agregamos esto al modelo:
+
+ @python_2_unicode_compatible
+ def __str__(self):
+     return self.title
+
+
+OJO: el _from __future__ import unicode_literals tiene que ser la primera linea del fichero

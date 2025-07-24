@@ -1,0 +1,6 @@
+
+ du -hs $(du -s * | sort -g | awk '{print $2}')
+
+ du -hs $(du -s .[!.]* * | sort -g | awk '{print $2}')
+
+via https://snipt.net/serialsito/tag/du/

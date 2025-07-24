@@ -1,0 +1,86 @@
+!Limpiar una instalación de packstack
+Via [https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/3/html/Getting_Started_Guide/appe-Getting_Started_Guide-Removing_PackStack_Deployments.html]
+
+No existe un mecanismo automatizado que elimine una instalación de packstack, pero se pueden seguir dos procedimientos manuales
+
+!!Eliminación completa de los paquetes usados por OpenStack
+La eliminación completa implica el uso de un script que automatiza la limpieza. Cuidado, porque este script no discrimina, y elimina absolutamente todo. Úsalo sólo si en el sistema objetivo no hay nada más que un packstack instalado, dado que puedes llegar a perder bases de datos.
+
+El script se puede encontrar en [https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/3/html/Getting_Started_Guide/appe-Getting_Started_Guide-Removing_PackStack_Deployments.html#idp3693624]
+
+Este script elimina todos los servicios, ficheros y bases de datos creadas con la instalación de packstack, incluyendo puppet y nagios, así como las bases de datos MySQL. Puede que ciertos paquetes o ficheros que sigan estando activos (por ejemplo, si has instalado mongo de forma manual, o si has modificado sus ficheros de configuracion mediante enlaces, puede que RPM guarde copias con la extensión rpmsave).
+
+Guarda el contenido en un fichero (copialo desde el codigo fuente de esta pagina, no directamente desde la vista web, o mejor desde la web original de redhat indicada arriva) y ejecutalo:
+
+#!/bin/bash
+# Warning! Dangerous step! Destroys VMs
+for x in $(virsh list --all | grep instance- | awk '{print $2}') ; do
+    virsh destroy $x ;
+    virsh undefine $x ;
+done ;
+
+# Warning! Dangerous step! Removes lots of packages
+yum remove -y nrpe "*nagios*" puppet "*ntp*" "*openstack*" 
+"*nova*" "*keystone*" "*glance*" "*cinder*" "*swift*" 
+mysql mysql-server httpd "*memcache*" scsi-target-utils 
+iscsi-initiator-utils perl-DBI perl-DBD-MySQL ;
+
+# Warning! Dangerous step! Deletes local application data
+rm -rf /etc/nagios /etc/yum.repos.d/packstack_* /root/.my.cnf 
+/var/lib/mysql/ /var/lib/glance /var/lib/nova /etc/nova /etc/swift 
+/srv/node/device*/* /var/lib/cinder/ /etc/rsync.d/frag* 
+/var/cache/swift /var/log/keystone /var/log/cinder/ /var/log/nova/ 
+/var/log/httpd /var/log/glance/ /var/log/nagios/ /var/log/quantum/ ;
+
+umount /srv/node/device* ;
+killall -9 dnsmasq tgtd httpd ;
+
+vgremove -f cinder-volumes ;
+losetup -a | sed -e 's/:.*//g' | xargs losetup -d ;
+find /etc/pki/tls -name "ssl_ps*" | xargs rm -rf ;
+for x in $(df | grep "/lib/" | sed -e 's/.* //g') ; do
+    umount $x ;
+done
+
+!!Eliminación parcial de paquetes de openstack
+Si quieres quitar exclusivamente los paquetes que pertenecen a openstack, hay un script algo menos expeditivo que el anterior, pero que puede dejar restos en el sistema.
+
+Este script se encuentra en [https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux_OpenStack_Platform/3/html/Getting_Started_Guide/apas02.html]
+
+Guarda el contenido en un fichero (copialo desde el codigo fuente de esta pagina, no directamente desde la vista web, o mejor desde la web original de redhat indicada arriva) y ejecutalo:
+
+#!/bin/bash
+# Warning! Dangerous step! Destroys VMs
+for x in $(virsh list --all | grep instance- | awk '{print $2}') ; do
+    virsh destroy $x ;
+    virsh undefine $x ;
+done ;
+
+yum remove -y "*openstack*" "*nova*" "*keystone*" "*glance*" "*cinder*" "*swift*";
+
+ps -ef | grep -i repli | grep swift | awk '{print $2}' | xargs kill ;
+
+# Warning! Dangerous step! Deletes local OpenStack application data
+rm -rf  /etc/yum.repos.d/packstack_* /var/lib/glance /var/lib/nova /etc/nova /etc/swift \
+/srv/node/device*/* /var/lib/cinder/ /etc/rsync.d/frag* \
+/var/cache/swift /var/log/keystone /var/log/cinder/ /var/log/nova/ \
+/var/log/glance/ /var/log/quantum/ ;
+
+# Ensure there is a root user and that we know the password
+service mysql stop
+cat > /tmp/set_mysql_root_pwd < < EOF
+FLUSH PRIVILEGES;
+EOF
+
+/usr/bin/mysqld_safe --init-file=/tmp/set_mysql_root_pwd &
+rm /tmp/set_mysql_root_pwd
+
+mysql -uroot -pMyNewPass -e "drop database nova; drop database cinder; drop database keystone; drop database glance;"
+
+umount /srv/node/device* ;
+vgremove -f cinder-volumes ;
+losetup -a | sed -e 's/:.*//g' | xargs losetup -d ;
+find /etc/pki/tls -name "ssl_ps*" | xargs rm -rf ;
+for x in $(df | grep "/lib/" | sed -e 's/.* //g') ; do
+    umount $x ;
+done

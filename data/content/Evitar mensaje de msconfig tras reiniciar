@@ -1,0 +1,4 @@
+Cuando utilizamos msconfig para modificar el arranque del sistema, una vez que reiniciamos aparece una ventana informativa diciendo que se ha utilizado msconfig para realizar cambios en el arranque.
+
+Para forzar a que esta ventana aparezca, y así no verla en el siguiente arranque, lanzamos msconfig con la opción /auto:
+ msconfig /auto

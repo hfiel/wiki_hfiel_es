@@ -1,0 +1,11 @@
+La función Weeknum de excel devuelve el nº de semana de una fecha dada, pero no devuelve el número ISO de la semana, y por lo tanto a veces ocurren situaciones raras (PE, 2012 tenía 54 semanas según excel).
+
+Para obtener el nº de semana ISO sin tener que instalar nada adicional, podemos usar la formula:
+
+ =INT((A2-WEEKDAY(A2;2)-DATE(YEAR(A2+4-WEEKDAY(A2;2));1;4))/7)+2
+
+
+VIA: [http://www.mrexcel.com/forum/excel-questions/466069-wrong-week-number-using-weeknum-date-x.html]
+
+
+NOTA: probado en un windows en español, con Excel en inglés, con la separación de listas en ; (en un excel ingles con windows ingles, la separacion sería con ,)

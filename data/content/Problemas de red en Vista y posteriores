@@ -1,0 +1,14 @@
+Los equipos que llevan alguna de las versiones de Windows desde Vista, tienen en ocasiones problemas para obtener direcciones IP mediante DHCP, e incluso para conectarse a una red con IP fija.
+
+En estos casos, una posible solución es desactivar la autoconfiguración de los interfaces bajo IP v4.
+
+Lo hacemos con dos comandos:
+ netsh interface ipv4 show interface
+
+Esto nos devuelve la lista de interfaces en el sistema. Localizamos la línea correspondiente a la tarjeta que nos da problemas (al final de la línea aparece su nombre), y anotamos el número de la primera columna, que es el ID del interfaz.
+
+Una vez tenemos ese número, lanzamos este otro comando:
+ netsh interface ipv4 set interface NUMERO dadtransmits=0 store=persistent
+Donde NUMERO es el ID de la tarjeta afectada.
+
+Y listo, ya no debería fallar la conexión.

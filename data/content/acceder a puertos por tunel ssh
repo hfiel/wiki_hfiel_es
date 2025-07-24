@@ -1,0 +1,12 @@
+Cuando tenemos que acceder mediante pivoting por ssh, y a la maquina destino no podemos llegar mediante algunos puertos, podemos emplear un tunel ssh para que redirecciones a puertos locales las peticiones, y a través del SSH de la maquina pivote lleguen al destino.
+
+
+conectamos al pivote con:
+
+ ssh usuario@pivote -L puerto_local:destino:puerto_destino
+
+Por ejemplo (ejemplo con dos puertos)
+
+ ssh usuario@192.168.1.2 -L 9091:192.168.1.3:9090 -L 8081:192.168.1.3:8080
+
+Esto nos conecta a la maquina 192.168.1.2, y nos redirige las peticiones localhost:9091 al 192.168.1.3:9090 usando la 1.2 como pivote (y lo mismo para localhost:8081)

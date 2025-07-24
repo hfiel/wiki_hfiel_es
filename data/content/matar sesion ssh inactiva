@@ -1,0 +1,38 @@
+http://haydenjames.io/kill-inactive-ssh-sessions/
+
+
+So you’ve been disconnected from your server which resulted in an idle user session. You know this because when you used the “w" command, you see something like the following:
+
+
+ 22:47:28 up 285 days, 21:09, 2 users, load average: 1.04, 1.17, 1.30
+ USER TTY FROM LOGIN@ IDLE JCPU PCPU WHAT
+ root pts/0 ipxxx-xxx-xxx-xxx 23:54 26:40 9.26s 0.86s -bash
+ root pts/1 ipxxx-xxx-xxx-xxx 22:44 0.00s 0.00s 0.00s w
+
+There are a few ways to kill idle sessions. Including editing you sshd_config. But here’s an easy after-the-fact method:
+
+Run this command:
+
+
+ pstree -p
+
+the output will look something like this:
+
+
+ ├─sshd(3102)─┬─sshd(3649)───bash(3656)
+ │            └─sshd(16680)───bash(16687)───pstree(17073)
+
+Now look for the parent PID of the session – PID from the line WITHOUT the “pstree” command.
+
+To kill session, type:
+
+
+ kill 3649
+
+Replace 3649 with your idle ssh’s PID. Check afterwards with the “w” command.
+
+Now to prevent this from happening in the future you can edit your server’s /etc/ssh/sshd_config and add these lines:
+
+
+ ClientAliveInterval 600
+ ClientAliveInterval 3

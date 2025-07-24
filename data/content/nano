@@ -1,0 +1,6 @@
+Para saltar a la siguiente palabra: ctrl + espacio
+Para saltar a la anterior: ctrl + alt + espacio
+
+¿y si estoy por ssh, como se manda el alt? no se manda, asi que hay que usar esc + espacio
+
+Cuidado: la combinacion esc + espacio no respeta multiples pulsaciones de espacio con la misma pulsacion de esc, y hay que soltar y pulsar ambas teclas cada vez, o si no se introducen espacios no deseados

@@ -1,0 +1,21 @@
+When you are building and deploying a software from source, usually the last step is
+
+ sudo make install
+
+This installs the software in the system, however it does install the files without tracking them, making it difficult to remove the software or even causing troubles if any of the related files conflicts with other software or packages.
+
+
+Enter checkinstall
+
+https://help.ubuntu.com/community/CheckInstall
+
+
+Using checkinstall, instead of the usual make command you would run
+
+ sudo checkinstall
+
+And an assistant will help you define the basic information about your package (as name, versions, requirements...).
+
+It then will build the package, and if any error appears will report to you, allowing to fix them before the package is deployed, or even warning you if the software tries to create files in places you probably don't want (like your home), allowing you to exclude those from the resulting final package.  
+
+When the process completes successfully, you will have a .deb package already installed in the system, and ready to manage with dpkg, allowing you to easily remove it just using the name of the package as reference.

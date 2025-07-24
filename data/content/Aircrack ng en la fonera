@@ -1,0 +1,18 @@
+ Aircrack-ng
+
+Para que se pueda instalar aircrack, hay que habilitar el jffs.
+1 se habilita, se salva y se aplica
+2 se limpia, se aplica
+3 se reinicia
+
+luego, desde ssh:
+
+mkdir -p /jffs/tmp/ipkg    (SI NO EXISTE)
+
+cd /tmp
+
+wget http://ipkg.k1k2.de/packages/libpthread_0.9.28.2-10_mips.ipk
+ipkg install -d /jffs/ libpthread_0.9.28.2-10_mips.ipk
+wget http://ipkg.k1k2.de/packages/aircrack-ng_0.9.1-1_mips.ipk
+ipkg install -d /jffs/ aircrack-ng_0.9.1-1_mips.ipk
+reboot

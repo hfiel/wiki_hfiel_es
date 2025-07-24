@@ -1,0 +1,13 @@
+Cuando intentamos encontrar el driver de un dispositivo desconocido, en ocasiones no tenemos ni idea de por donde empezar, y casi nunca se conservan los manuales ni drivers originales.
+
+Una posible solución cuando lo damos todo por perdido, es buscar el driver mediante el identificador del dispositivo. El UID es un código único que se asigna a cada dispositivo. Mediante el mismo podemos localizar el driver correcto.
+
+* Abrimos el administrador de dispositivos
+* Localizamos el dispositivo problematico y abrimos sus propiedades
+* En la pestaña detalles, selccionamos Identificadores de hardware
+* Copiamos el primer elemento (suele ser el mas largo). Si con ese no aparece nada, mirar a ver si hay algún otro diferente.
+* Nos vamos a [http://www.devid.info/]
+* Pegamos el código en el cuadro de búsqueda
+* Obtenemos la lista de controladores correspondientes a ese dispositivo.
+
+Encontrado originalmente via: [http://habitacion404.com/?p=262]

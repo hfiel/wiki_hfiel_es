@@ -1,0 +1,11 @@
+Para poner el modo monitor, buscamos el nombre de la interfaz mediante el comando iwconfig.
+
+Supongamos que nuestra interfaz se llama ath0.
+
+Para activar el modo monitor, usamos el comando airmon, que es parte de la suite aircrack:
+
+ airmon-ng start ath0
+
+Si queremos que se ponga en un canal en concreto (y asi evitar que este todo el rato saltando de frecuencia, buscando en todos los canales), solo tenemos que indicar el nº de canal (pe el canal 9):
+
+ airmon-ng start ath0 -c 9

@@ -1,0 +1,26 @@
+Para poder installar swagger-editor en ubuntu, necesitamos tener git, npm y nodejs:
+
+ sudo apt-get install git npm nodejs
+
+
+Creamos un enlace a nodejs:
+
+ ln -s /usr/bin/nodejs /usr/local/bin/node
+
+Nos clonamos el repo y entramos en el mismo:
+
+ git clone https://github.com/swagger-api/swagger-editor.git
+ cd swagger-editor
+
+Lo lanzamos:
+
+ npm start
+
+Y ya lo debemos tener disponible en http://localhost:8080
+
+
+NOTA: Si queremos hacer instalacion con Docker, el puerto por defecto es el 8080. Si necesitamos cambiarlo y evitar que nos interfiera con otros servicios, editamos el fichero swagger-editor/Dockerfile y cambiamos el puerto al final del mismo:
+
+ EXPOSE 8080
+
+NOTA2: si se quiere cambiar el puerto una vez instalado, hay que volver a hacer build de la imagen

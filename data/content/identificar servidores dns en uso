@@ -1,0 +1,8 @@
+Via.
+https://askubuntu.com/questions/152593/command-line-to-list-dns-servers-used-by-my-system
+
+Con network manager activo, usamos el comando:
+
+ nmcli dev list iface <interfacename> | grep IP4
+
+donde <interfacename> es la interfaz que tengamos

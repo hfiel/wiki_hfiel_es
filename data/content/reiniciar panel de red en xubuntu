@@ -1,0 +1,11 @@
+Localizamos el ID del panel:
+
+ ps -afe | grep nm-applet
+
+Matamos el proceso:
+
+ kill -9 XXXXXXXX
+
+Levantamos de nuevo el panel:
+
+ nm-applet &

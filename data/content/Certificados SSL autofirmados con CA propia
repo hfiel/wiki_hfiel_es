@@ -1,0 +1,23 @@
+Via: https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
+
+Para un certificado autofirmado para pruebas, con 10 años de validez
+
+1.- Clave CA (sin contraseña):
+
+ openssl genrsa -out certificate-ca.key 4096
+
+2.- Certificado raiz CA
+
+ openssl req -x509 -new -nodes -key certificate-ca.key -sha256 -days 3650 -out certificate-ca.crt
+
+3.- Clave máquina
+
+ openssl genrsa -out certificate.key 2048
+
+4.- Solicitud de firma (indicar el fqdn completo que se quiere certificar)
+
+ openssl req -new -key certificate.key -out certificate.csr 
+
+5.- Generacion del certificado de maquina mediante el raiz de la CA
+
+ openssl x509 -req -in certificate.csr -CA certificate-ca.crt -CAkey certificate-ca.key -CAcreateserial -out certificate.crt -days 3650 -sha256

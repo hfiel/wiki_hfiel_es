@@ -1,0 +1,9 @@
+!Bases de datos
+
+!!MySQL
+[Combinar campos date y time separados en un datetime]
+[Convertir datetime UTC a fecha y hora local]
+[Problema mayusculas al migrar MySQL de Windows a Linux]
+[varios PostreSQL]
+[sacar listado de todas las tablas y campos a un fichero]
+[verificar hash de clave de usuario en postgresql]

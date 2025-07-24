@@ -1,0 +1,21 @@
+Para instalar el gestor de administración de tomcat:
+
+ $ sudo apt-get install tomcat6-admin
+
+
+Para tener acceso al mismo, en el fichero
+
+ /var/lib/tomcat6/conf/tomcat-users.xml
+
+Dentro de la sección <tomcat-users>, creamos los perfiles de manager-gui y admin-gui, y creamos un usuario con dichos perfiles:
+
+<role rolename="manager-gui"/>
+<role rolename="admin-gui"/>
+<user username="nombre_usuario" password="clave_usuario" roles="manager-gui,admin-gui"/>
+
+
+
+Una vez reiniciado tomcat, podremos acceder a:
+
+http://<IP_SERVIDOR_TOMCAT>:8080/manager/html
+http://<IP_SERVIDOR_TOMCAT>:8080/host-manager/html

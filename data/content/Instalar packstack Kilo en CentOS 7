@@ -1,0 +1,75 @@
+!Instalar packstak Kilo en Centos 7
+Via [https://www.rdoproject.org/install/quickstart/]
+
+!!!Problemas con mongo
+Via [http://dbaxps.blogspot.com.es/2016/01/set-up-rdo-kilo-on-centos-72-with.html]
+
+En este momento (enero 2016) La instalación de packstack por defecto puede generar problemas durante el paso de configuración de MongoDB mediante Puppet.
+
+Para evitarlo, antes de llevar a cabo la instalación de packstack, tenemos que  crear un enlace del fichero de configuracion de mongo (/etc/mongodb.conf) con el fichero de configuración que crea packstack (/etc/mongod.conf).
+
+Las instrucciones exactas se detallan en el proceso de instalación a continuación.
+
+!!Pasos previos
+* Instalar CentOS-7 Minimal. Recuerda configurar la red con IP fija durante la instalación, y que levante al iniciar el sistema. Es recomendable crear un usuario durante la instalación para evitar usar root de manera indiscriminada.
+* Actualizar todo
+::sudo yum update -y::
+* Verifica que tu configuracion (/etc/sysconfig/network-scripts/ifcfg-<dev>) no está controlada por network manager (el cual se desactivará a continuación) y que se levanta al iniciar, comprobando que tienes estas dos líneas en tu script de configuración.
+::NM_CONTROLLED=no::
+::ONBOOT=yes::
+* Desactivar network manager
+(si es una CentOS < 6.5)
+
+::sudo service NetworkManager stop::
+::sudo chkconfig NetworkManager off::
+
+(si es una Centos >= 7, con systemd)
+
+::sudo systemctl stop NetworkManager.service::
+::sudo systemctl disable NetworkManager.service::
+
+
+* Desactivamos SELINUX
+Editamos el fichero ::/etc/selinux/config:: 
+
+
+Cambiamos la línea ::SELINUX=enforcing:: por ::disabled::
+
+
+* Si el firewall está activo, lo desactivamos
+
+::sudo systemctl stop firewalld::
+::sudo systemctl disable firewall::
+
+!!Paso a paso (KILO)
+
+Estos pasos configuran un OpenStack completo (core + ceilometer + nagios) en un único puesto.
+* Agregar repo RDO para kilo
+::sudo yum install -y https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm::
+* Instalamos packstack (sin lanzarlo aun)
+::sudo yum install -y openstack-packstack::
+* Instalamos mongo y pymongo
+::sudo yum install -y mongodb-server python-pymongo::
+* Eliminamos el fichero de configuración de mongo
+::sudo rm -f /etc/mongodb.conf::
+* Creamos un nuevo fichero vacio que configurará packstack (ojo, no es el mismo nombre que el que acabas de eliminar)
+::sudo touch -f /etc/mongod.conf::
+* Creamos un enlace al nuevo fichero con el nombre del que hemos eliminado
+::sudo ln -s /etc/mongod.conf /etc/mongodb.conf::
+* Verificamos el enlace creado
+:: ls -l /etc/mongo*::
+* Volvemos al home del usuario
+::cd::
+* Creamos un fichero de respuesta de packstack
+::packstack --gen-answer-file=instalacion.txt::
+* Editamos el fichero de respuesta
+::vi instalacion.txt::
+* Localizamos la línea con el nombre del servicio keystone
+::CONFIG_KEYSTONE_SERVICE_NAME=keystone::
+* Modificamos el nombre del servicio para que use httpd
+::CONFIG_KEYSTONE_SERVICE_NAME=httpd::
+* Llevamos a cabo cualquier configuración adicional que necesitemos en el fichero de respuesta (claves, NTP, IP...) y guardamos el fichero
+* Lanzamos la instalación de packstack usando el fichero de respuesta
+::packstack --answer-file=instalacion.txt::
+* Todos los puntos de la instalación deben ejecutarse correctamente ahora. Si algo fallara y no se pudiera arreglar, puede ser necesario llevar a cabo una limpieza de la instalación.
+* Cuando la instalación termine, se ofrecen las rutas y claves definidas para algunos servicios. Las claves de admin y demo, así como las variables de entorno para estos usuarios se encuentran en el home, en los ficheros keystonerc_admin y keystonerc_demo. Estos ficheros permiten, mediante source, usar los clientes de openstack directamente.

@@ -1,0 +1,9 @@
+Para poder comentar bloques de código (en lugar de línea a línea mediante %), necesitamos incluir el paquete **comment** en el encabeado del documento: 
+
+ \\usepackage{comment}
+
+Y luego comentamos el código encerrándolo en un entorno **comment** de la siguiente forma:
+
+ \\begin{comment}
+  CODIGO A COMENTAR
+ \\end{comment}

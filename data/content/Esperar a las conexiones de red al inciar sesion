@@ -1,0 +1,13 @@
+Cuando se inicia sesión en Windows XP, se lleva a cabo antes de que las conexiones de red estén establecidas, para acelerar el proceso.
+
+En algunos casos (principalmente con equipos lentos), esto provoca que programas que establecen la conexion en el inicio se ejecuten antes de tener disponible el enlace, lo que puede provocar errores.
+
+Mediante directivas de grupo, se puede forzar al equipo a esperar hasta que todas las conexiones se hayan establecido antes de iniciar sesión.
+
+La directiva (accesible mediante el \'\'editor de objetos de directiva de grupo\'\', en la consola de administración \'\'mmc\'\') se encuentra en:
+\'\'Directiva de equipo local->\'\'
+\'\'Configuración del equipo->\'\'
+\'\'Plantillas Administrativas->\'\'
+\'\'Sistema->\'\'
+\'\'Inicio de sesión->\'\'
+**Esperar siempre la detección de red al inicio del equipo y de sesión (Habilitada)**

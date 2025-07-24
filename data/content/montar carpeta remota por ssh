@@ -1,0 +1,38 @@
+SSHFS
+
+Obtenido de:
+http://www.howtogeek.com/howto/ubuntu/how-to-mount-a-remote-folder-using-ssh-on-ubuntu/
+
+Instalamos SSHFS
+
+ sudo apt-get install sshfs
+
+
+Creamos un directorio local donde hacer el montaje (en este ejemplo, remoto):
+
+ sudo mkdir /mnt/remoto
+
+
+Montamos la unidad remota (en este ejemplo, /home/ubuntu, con el usuario ubuntu, de la ip 192.168.1.2)
+
+ sudo sshfs ubuntu@192.168.1.2:/home/ubuntu /mnt/remoto
+
+Nos pide la clave, y ya nos queda montado.
+
+Para desmontar, hacemos simplemente umount:
+
+ sudo umount /mnt/remoto
+
+
+Para conectar con SSH mediante claves RSA, tenemos que llamar al sshfs indicándole las claves:
+
+ 
+ sudo sshfs -o IdentityFile=~/.ssh/id_rsa ubuntu@192.168.1.2:/home/ubuntu /mnt/remoto
+
+
+NOTA: En caso de que cuando intentemos acceder a la carpeta tras montarla no podamos (y veamos cosas como permisos d?????????), hay que emplear la opción -o allow_other a la hora de montar el sshfs:
+
+  sudo sshfs -o allow_other ubuntu@192.168.1.2:/home/ubuntu /mnt/remoto
+
+
+GUI para facilitar la conexión en caso de no querer montar en una carpeta: gigolo

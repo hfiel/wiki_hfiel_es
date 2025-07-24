@@ -1,0 +1,13 @@
+Con la macro [http://tug.ctan.org/tex-archive/macros/generic/dirtree/|dirtree] podemos dibujar jerarquias de directorios en formato arbol.
+
+Para instalarla en MacTex:
+* Descarga el fichero y descomprimelo
+* Abre con tu TexShop el fichero dirtree.ins, y compilalo emplenando Tex (Plain Tex)
+* Crea una carpeta texmf en la librería de tu carpeta de usuario: ~/Library/
+* Las extensiones de TeX iran en una carpeta tex dentro de la anterior, y las de LaTeX en una subcapeta latex, de esta forma:
+
+ ~/Library/texmf/tex/latex
+
+* Copia los ficheros dirtree.tex y dirtree.sty a esa carpeta
+
+Mira la [http://tug.ctan.org/get/macros/generic/dirtree/dirtree.pdf|ayuda en PDF] del fichero para ver un ejemplo

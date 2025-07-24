@@ -1,0 +1,7 @@
+Para truncar un fichero de log (texto) pero mantener las últimas N lineas (por ejemplo 1000):
+
+
+ echo "$(tail -1000 fichero.log)" > fichero.log
+
+
+Via, como no, stackexchange: https://unix.stackexchange.com/a/310871

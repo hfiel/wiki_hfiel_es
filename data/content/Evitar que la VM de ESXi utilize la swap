@@ -1,0 +1,12 @@
+!Evitar que ESXi utilize la SWAP para gestionar la memoria RAM de la VM
+
+Por defecto, aunque tu servidor ESXi tenga toneladas de RAM libres, se creará un fichero de intercambio bastante grande, que será el que use la máquina en muchas ocasiones. Esto ralentiza mucho el funcionamiento, sobre todo si tienes varias máquinas accediendo a la vez a esa unidad de disco.
+
+Para evitar que ESXi use la SWAP, puedes añadir estas líneas al fichero de configuración (.vmx) de tu máquina:
+
+ mainMem.useNamedFile = \"FALSE\"
+ MemAllowAutoScaleDown = \"FALSE\"
+ MemTrimRate = \"0\"
+ sched.mem.pshare.enable = \"FALSE\"
+
+OJO: si haces esto, asegúrate de disponer de RAM física suficiente para todas tus máquinas, porque en caso contrario dudo mucho que ni siquiera arranquen, y si lo hacen se matarán entre ellas por la memoria que tengas.

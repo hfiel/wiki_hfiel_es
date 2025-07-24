@@ -1,0 +1,1 @@
+select * from information_schema.columns where table_schema = 'NOMBRE_BBDD' order by table_name,ordinal_position into outfile '/RUTA_FICHERO_CSV_SALIDA' fields terminated by ',' enclosed by '"' lines terminated by '\n';

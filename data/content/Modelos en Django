@@ -1,0 +1,139 @@
+!!Modelos
+
+Para crear la aplicación, muy probablemente necesitaremos una bbdd y tablas en la misma. Django simplifica el proceso de creación de las tablas, haciendo transparente tanto la definición de los datos como la interacción con el gestor de BD escogido.
+
+Las tablas, campos de las mismas y sus relaciones se crean mediante modelos.
+
+Los modelos en django se definen dentro de cada aplicación, en un fichero models.py, que comienza conteniendo simplemente la línea:
+
+ from django.db import models
+
+Tras importar el módulo adecuado, definimos cada modelo como una clase (como siempre en python, podemos -y debemos- poner un docstring bajo cada definicion):
+
+ class NombreModelo(models.Model)
+  """Definición y explicación breve"""
+  campo = models.<TipoDeCampo>("Texto largo campo", <Parámetros>)
+
+Por ejemplo, una tabla Personas que tenga dos campos de texto (nombre y apellidos) se crea mediante el siguiente modelo:
+
+ class Personas(models.Model)
+  """Modelo para almacenamiento de contactos"""
+  nombre = models.CharField("Nombre de la persona", max_lenght=50)
+  apellidos = models.CharField("Apellidos de la persona", max_lenght=100)
+
+!!Herencia
+Para que un modelo herede de otro, en la declaración, en lugar de indicarle que herede de models.Model, le indicamos de que modelo tiene que heredar. PE
+
+ class Alumno(Personas):
+
+!!Relaciones
+De la misma manera que django nos simplifica crear los campos, podemos crear relaciones simplemente creando foreign keys. Cada modelo (tabla) que sea creado, automáticamente tiene un campo ID definido como primary key. Este campo lo hace django de forma transparente, pero si queremos usar algún campo específico podemos hacerlo [ver https://docs.djangoproject.com/en/1.8/topics/db/models/#automatic-primary-key-fields]
+
+Para crear una FK en una tabla, creamos un campo de la siguiente forma 
+
+ nombre_campo = models.ForeignKey(Modelo)
+
+PE, para crear una FK a la tabla personas de arriba:
+
+ personas = models.ForeignKey(Personas)
+
+
+!!Tipos de campos
+Disponemos de muchos tipos de campos que se pueden consultar en [https://docs.djangoproject.com/en/1.8/ref/models/fields/]
+
+En concreto, para los campos de fecha, suele ser util tener un valor por defecto, que podemos asignar por ejemplo al valor actual de la fecha del sistema.
+
+Para que este valor se ajuste a la zona horaria del usuario (lógicamente, en la configuración de nuestro proyecto de python tendremos que tener configurada la zona horaria correctamente para que esto rule), usamos esto:
+
+ from django.utils import timezone
+ ...
+ campo_fecha = models.DateTimeField("Descripcion", default=timezone.now())
+
+Pero... default sólo acepta com argumento una función, así que si quisiéramos poner por ejemplo un incremento a esa fecha (por ejemplo un día más), sería necesario que nos definiéramos una funcion (ver [https://stackoverflow.com/questions/27491248/django-default-timezone-now-delta])
+
+ from django.utils import timezone
+ 
+ def hoy_mas_uno():
+   return timezone.now() + timezone.timedelta(days=1)
+
+ ...
+ fecha = models.DateTimeField(default=hoy_mas_uno)
+
+!!Campos e internacionalización
+Cada uno recibe una serie de parámetros opcionales, siendo el primero siempre (***** siempre, siempre... no: una foreignkey no recibe nada más que el tipo al que apunta) un campo descriptivo.
+
+Este campo descriptivo debería crearse con la i18n en mente, para que el código sea traducible sin demasiada complicación.
+
+para esto usaremos las funciones ugetttext() y ugettext_lazy() (ver [https://docs.djangoproject.com/en/1.8/topics/i18n/translation/])
+
+Python es interpretado, no obstante hay que considerar que tenemos 2 tipos de "tiempos" distintos: ejecución e importación (por llamarlos de alguna forma), y esto nos afecta de cara a la traducción:
+
+ugettext se usa para cadenas en tiempo de ejecución (es decir, que se cargan conforme se van necesitando, como por ejemplo las funciones), mientras que ugettext_lazy se cargan en tiempo de importación (es decir, al comienzo del funcionamiento cuando se importa un modulo, como por ejemplo en los ficheros de definicion de modelos)
+
+
+Por convención, la que más se vaya a emplear en un fichero .py (bien sea ugettexxt o ugettext_lazy) se debe definir con un alias al guión bajo a la hora de cargarla:
+
+ from django.utils.translation import ugettext_lazy as _
+
+
+Y una vez definido el alias ya podemos encerrar las cadenas a traducir dentro de _("cadena") de esta forma:
+
+ title = models.CharField(_("Title"), max_length=200)
+
+!!Migracion
+
+O como crear los modelos reales a partir de nuestra definición...
+
+Una vez definidos los modelos, tenemos que generar la migración, que es la que se encarga realmente de crear los elementos necesarios de la bbdd.
+
+El primer paso es crear la migración, y luego ejecutarla. Cada vez que tengamos un cambio de modelo, habrá que crear la migración de nuevo.
+
+Los comandos son:
+
+ python manage.py makemigrations
+ python manage.py migrate
+
+El primero nos crea el fichero .py de comandos de la migración (lo encontramos en la carpeta de la aplicación, dentro de una carpeta migrations
+
+El segundo nos lleva a cabo los cambios en la bbdd que se haya definido en el proyecto.
+
+NOTA: para ver las migraciones efectuadas hasta el momento:
+
+ python manage.py migrate --list
+
+Se puede hacer rollback a una migración anterior usando.
+
+  python manage.py migrate <migracion>
+
+pero ojo, que tendremos que ver que no nos cargamos ninguna dependencia por el camino (ver [https://markusholtermann.eu/2014/09/django-17-database-migrations-done-right/]).
+
+!!Como cambiar un modelo
+
+Vamos a ver que pasa al cambiar un modelo:
+
+Imaginemos que tenemos un modelo llamado News (este hereda de otro llamado BaseNews, pero ahora mismo vamos simplemente a ver esto):
+
+
+ class News(models.Model):
+     """Model for the News with specific fields"""
+     title = models.CharField(_("Title"), max_length=200)
+
+Cuando estamos usándolo (en los siguientes puntos, al registrarlo en el admin) observamos que Django de manera automática para crear el plural lo llama Newss. Para evitar esto, tenemos que usar una metaclase [https://docs.djangoproject.com/en/1.8/topics/db/models/#meta-options] que le indica el nombre a usar cuando tengamos plurales (News) [https://docs.djangoproject.com/en/1.8/ref/models/options/#django.db.models.Options.verbose_name_plural], lo que nos deja el modelo así:
+
+ class News(models.Model):
+     """Model for the News with specific fields"""
+     title = models.CharField(_("Title"), max_length=200)
+
+
+     class Meta:
+         verbose_name_plural = "News"
+
+
+!!Actualizar el modelo
+
+Una vez hecho el cambio, hay que actalizarlo:
+
+ python manage.py makemigrations
+ python manage.py migrate
+
+Y esto ya crea el código necesario para hacer los cambios tanto en los ficheros python que definen los modelos (no el nuestro, sino el generado por el nuestro) y en la base de datos en sí.

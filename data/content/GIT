@@ -1,0 +1,51 @@
+**Chuletario de GIT:**
+
+
+* Clonar un repo:
+
+ git clone https://github.com/<repo.git>
+
+* Ver la rama actual
+
+ git branch -a
+
+* Cambiar de rama
+
+ git checkout <rama>
+
+
+* Añadir ficheros (todos los nuevos)
+
+ git add *
+
+* Verificar estado (lista de ficheros nuevos/modificados/eliminados)
+ 
+ git status
+
+* Hacer commit de cambios
+
+ git commit -m "mensaje del commit"
+
+* Subir los ficheros
+
+ git push origin <rama>
+
+* Actualizar la copia local
+
+ git pull origin <rama>
+
+* Eliminar un fichero (tras haberlo eliminado del local)
+
+ git rm <fichero>
+
+
+* En caso de tener ficheros demasiado grandes:
+
+https://help.github.com/articles/working-with-large-files/
+
+
+* Descargar un fichero de una release dentro de un repo privado:
+
+ curl -O -L --user "usuario" <URL al fichero a descargar>
+
+Te pide la clave, y debe descargarse exactamente como se llame en origen

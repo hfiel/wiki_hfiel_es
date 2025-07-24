@@ -1,0 +1,51 @@
+! Uso de tar
+
+tar nos permite empaquetar ficheros y direcotorios en un único archivo. El archivo resultante puede ir o no comprimido (en zip, bzip2...):
+
+ tar -cvf mi_archivo.tar fichero1 fichero2 directorio1/ directorio2/
+
+Esto indica a tar que:
+ -c crea el fichero tar
+ -v (verbose) muestra informacion detallada
+ -f indica el fichero tar a crear
+
+
+Una vez que tenemos creado el tar, podemos actualizarlo (por ejemplo, en el caso de que uno de los ficheros haya sufrido modificaciones y queramos actualizar la copia que hay dentro del tar:
+
+ tar -uvf mi_fichero.tar fichero_a_actualizar
+
+Si el fichero existe, lo actualiza, y si no, lo agrega. Lo mismo vale para directorios.
+
+Adicionalmente, cuando creamos un tar podemos incluir la opción z (comprimir en zip), pero en este caso NO SE PODRÁ USAR LA OPCIÓN -u para actualizar.
+
+
+Una vez creado, para extraer, usamos la opción -x:
+
+ tar -xvf mi_fichero.tar
+
+Extrae el contenido del fichero (respetando la estructura de directorios que existiera al crearlo.
+
+
+Otra opción muy util permite comprobar que hay dentro de un fichero tar:
+
+ tar -tvf mi_fichero.tar
+
+que nos lista el contenido del archivo.
+
+
+Si queremos usar un fichero de texto (que tenga dentro ficheros, uno por linea) como entrada para el tar:
+
+ tar -czvf fichero.tar.gz -T lista.txt
+
+
+Si queremos crear lista.txt a partir de un tar (por ejemplo, para hacer un tar de backup de algo que venga en el tar):
+
+
+ tar -tf fichero.tar.gz | grep -v '/$' > lista.txt
+
+el grep me permite quitar los directorios, y de esta forma en la lista sólo tener ficheros concretos, evitando copiar lo que no se va a ver afectado.
+
+
+Con una ligera modificación, en lugar de una lista podemos obtener el número de ficheros únicos (sin directorios)
+
+ tar -tf fichero.tar.gz| grep -v '/$' | wc -l

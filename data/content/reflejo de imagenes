@@ -1,0 +1,10 @@
+!Reflejo con Javascript
+
+Para agregar un reflejo vertical a las imágenes (a lo web 2.0), cargamos el archivo [http://cow.neondragon.net/stuff/reflection/|reflection] con el javascript en el código de la página:
+
+<script type=\"text/javascript\" src=\"reflection.js\"></script>
+
+Y cuando queramos agregar reflejos a un imagen, le añadimos la clase reflected:
+
+
+<img style=\"vertical-align: bottom;\" src=\"example.jpg\" alt=\"Example Image\" class=\"reflected\">

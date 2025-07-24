@@ -1,0 +1,22 @@
+Para cambiar el nombre de usuario en ubuntu, necesitamos que el usuario a modificar no tenga sesión iniciada.
+
+Si es el unico usuario (el administrador), en primer lugar hay que habilitar el acceso root desde un terminal mediante
+
+ sudo passwd root
+
+y establecer la clave para root
+
+Una vez definida, cerramos sesión del usuario, nos cambiamos a una consola de texto (Ctrl + Alt + F1) y nos logamos como root
+
+Una vez logados, cambiamos el nombre. Por ejemplo, vamos a cambiar user1 a user2:
+
+Creamos el grupo user2
+
+ groupadd user2
+
+Cambiamos user1 a user2
+
+ usermod -d /home/user2 -m -g user2 -l user2 user1
+
+
+Importante: el nombre viejo puede seguir definido en algunos ficheros de configuración (grupos, permisos...). Esto puede afectar a algunos servicios y programas, aunque no debería suponer problemas en un uso normal.

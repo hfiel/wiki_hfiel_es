@@ -1,0 +1,24 @@
+Cuando se crea un usuario en postgresql, este devuelve el hash de la clave.
+
+En modo paranoico, para verificar que efectivamente esa clave es la almacenada, podemos calcular nosotros el hash.
+
+Creamos el usuario:
+
+ createuser -s -P -e ejemplo
+ Enter password for new role: 
+ Enter it again: 
+ CREATE ROLE ejemplo PASSWORD \'md5de731308b6b04ec9204ec58282f7eb87\' SUPERUSER   CREATEDB CREATEROLE INHERIT LOGIN;
+
+(con clave \'abcd\')
+
+PostgreSQL genera la clave usando el nombre de usuario como salt, y anteponiendo md5. Para verificar que el hash obtenido efectivamente corresponde a esa clave, usamos python para reproducir esa generación:
+
+ >>> import hashlib
+ >>> pghash = \"md5\" + hashlib.md5(\'abcd\' + \'ejemplo\').hexdigest()
+ >>> print pghash
+ md5de731308b6b04ec9204ec58282f7eb87
+
+Si el hash coincide, la clave es efectivamente la introducida
+
+
+Vía @dmsanchez, quien a su vez vía stackoverflow

@@ -1,0 +1,14 @@
+para ver los navegadores predeterminados:
+
+ sudo update-alternatives --list x-www-browser
+ sudo update-alternatives --list gnome-www-browser
+
+para configurar uno diferente (PE, chromium)
+
+ sudo update-alternatives --set gnome-www-browser /usr/bin/chromium-browser 
+ sudo update-alternatives --set x-www-browser /usr/bin/chromium-browser 
+
+para eliminar uno existente (PE firefox)
+
+ sudo update-alternatives --remove gnome-www-browser /usr/bin/firefox
+ sudo update-alternatives --remove x-www-browser /usr/bin/firefox

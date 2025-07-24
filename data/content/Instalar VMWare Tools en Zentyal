@@ -1,0 +1,7 @@
+!Instalar VMWare Tools en Zentyal 2.2
+
+Para poder instalar las VMWare Tools en Zentyal, primero hay que instalar en la máquina algunos paquetes adicionales. Lo logramos en una consola con el comando:
+
+ sudo apt-get install build-essential linux-headers-`uname -r` psmisc
+
+Cuando termine, ya podemos proceder con la instalación como siempre.

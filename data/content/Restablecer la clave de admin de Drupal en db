@@ -1,0 +1,4 @@
+Para restablecer la clave de admin, nos conectamos a mysql y a la bd de drupal.
+
+USE bbdd_de_drupal
+UPDATE users SET pass = MD5('nueva_clave') WHERE uid=1;

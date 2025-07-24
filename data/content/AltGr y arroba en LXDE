@@ -1,0 +1,16 @@
+** Mi gozo en un pozo, por un bug (y porque los gestores de escritorio ya no usan el fichero xorg.conf... de hecho ¡ya no existe por defecto!), las configuraciones no se gurardan... hay que lanzar esto cada vez... sigo buscando **
+
+** posible solucion: reconfigurar desde consola (hay que hacerlo cada vez) **
+
+sudo dpkg-reconfigure keyboard-configuration
+
+** Otra posible, que tambien hay que lanzar cada vez **
+
+Situacion: en el entorno LXDE, con la distribución de teclado en castellano, puede que la combinacion Alt-Gr 2 no produzca una arroba.
+
+Para cambiar esto podemos usar la utilidad lxkeymap, que nos permite escoger la distribución de teclado y las opciones desde el entorno grafico, sin tener que cambiar ficheros de configuración a mano.
+
+
+ sudo apt-get intall lxkeymap
+
+La ventana principal nos permite escoger la distribución. Si vamos al menu Tools->Show/Hide Profiles, desde ahi podemos acceder a las opciones que nos permiten definir Alt-Gr (o cualquier otra tecla) como modificador de tercer nivel (que es el nivel de teclado al que pertenecen simbolos como @ o # en el teclado qwerty en español)

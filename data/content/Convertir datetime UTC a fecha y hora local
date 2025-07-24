@@ -1,0 +1,14 @@
+Cuando almacenamos datos de fecha y hora es conveniente hacerlo en formato UTC, para evitar problemas con el horario de verano y facilitar la comparacion de registros generados en diferentes zonas horarias.
+
+Sin embargo, es importante poder convertir los datos a fecha y hora local, para que los usuarios no tengan problemas al interpretarlos.
+
+Usando la funcion \'\'CONVERT_TZ\'\' de MySQL podemos convertir un dato de tipo \'\'datetime\'\' de una zona a otra.
+
+Por ejemplo, este comando convierte el dato fechahora del formato UTC a la hora local de Madrid:
+
+::CONVERT_TZ(fechahora,\'UTC\',\'Europe/Madrid\')::
+
+Y si sólo queremos extraer la fecha, podemos combinarlo con un \'\'DATE\'\':
+::DATE(CONVERT_TZ(fechahora,\'UTC\',\'Europe/Madrid\'))::
+
+Para poder usar los nombres d las zonas horarias, es necesario que MySQL tenga correctamente establecido los nombres de timezone, ver la documentación al respecto [http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html#function_convert-tz]

@@ -1,0 +1,45 @@
+Varios comandos útiles:
+
+Cambiar al usuario postgres (que no tiene clave, no login definido):
+
+ $ sudo -i -u postgres
+
+Crear usuario (como usuario postgres):
+
+ postgres:~$ createuser -s -P -e nombre_usuario
+
+Crear base de datos (como usuario postgres):
+
+ postgres:~$ nombre_base_datos -O nombre_propietario
+
+Conectar al psql como el usuario postgres a la bbdd postgres:
+
+ $ sudo -i -u postgres psql postgres
+
+Lanzar una consulta directamente desde terminal:
+
+ $ psql -U nombre_usuario -h nombre_servidor nombre_base_datos -c "consulta_sql;"
+
+
+Comandos psql:
+
+Conectar a la BBDD:
+
+ # c nombre_base_datos
+
+Listar usuarios:
+
+ # dg
+
+Listar bases de datos:
+
+ # list
+
+Desconectar
+
+ # quit
+
+
+Listar esquemas, se debe lanzar ya conectado a la bbdd
+
+ # select nspname from pg_catalog.pg_namespace;

@@ -1,0 +1,46 @@
+para lanzar un comando con screen y poder recuperar luego la consola:
+
+Abrimos un terminal y ponemos:
+
+ screen
+
+dentro del screen lanzamos el comando que queremos "mantener vivo".
+Cuando se haya lanzado, hacemos:
+
+ ctrl + a + d 
+
+y nos devuelve a la terminal original, que incluso podemos cerrar.
+
+para recuperar la sesión, en un terminal ponemos:
+
+ screen -x
+
+
+Para ver la lista de screens activos:
+
+ screen -list
+
+Para reconectar a uno concreto:
+
+ screen -r <PID>
+
+Para cerrar una sesion definitivamente, dentro del screen simplemente escribimos
+
+ exit
+
+
+----
+
+mas comandos, via: [http://aperiodic.net/screen/quick_reference]
+
+Para crear una nueva ventana:
+
+ Ctrl+a c
+
+Para renombrar la ventana actual:
+
+ Ctrl+a A
+
+Para ver la lista de ventanas:
+
+ Ctrl+a "

@@ -1,0 +1,11 @@
+Basado en [http://www.sysadminlab.net/windows/configuring-ntp-on-windows-2008-r2]
+y modificado para que se ajuste a mi configuracion.
+
+Resumiendo (para sincronizar contra el servidor hora.roa.es):
+
+Como admin en una ventana de CMD:
+
+ net stop w32time
+ w32tm /config /manualpeerlist:hora.roa.es /syncfromflags:MANUAL
+ net start w32time
+ w32tm /resync

@@ -1,0 +1,5 @@
+Para saber que procesos han lanzado un programa en concreto, empleamos el siguiente comando en terminal (perdón, línea de comandos. Degeneración profesional de usar linux)
+
+En este ejemplo, para averiguar quien ha lanzado rundll32:
+
+ tasklist /m /fi \"IMAGENAME eq rundll32.exe\" >C:\\rundll32.txt

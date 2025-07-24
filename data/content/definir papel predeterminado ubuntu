@@ -1,0 +1,29 @@
+El tamaño predeterminado del papel que se usa en el sistema es el definido en:
+
+ /etc/papersize
+
+
+
+
+Para configurar el tamaño predeterminado se usa el comando:
+
+ paperconfig
+
+para ejecutarlo en interactivo:
+
+ paperconfig --force
+
+
+El tamaño definido por libpaper se configura con:
+
+ sudo dpkg-reconfigure libpaper1
+
+
+Para agregar un nuevo tamaño, dado que depende de libpaper, se necesita recompilar el paquete y modificar el fichero 
+
+ lib/paperspecs
+
+tal y como se indica en el readme:
+
+
+https://github.com/naota/libpaper/blob/master/README

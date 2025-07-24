@@ -1,0 +1,24 @@
+!Desactivar las características de autorun
+
+Para desactivar autorun (en versiones desde 2000 hasta server 2008) hay que instalar primero un parche, que se puede encontrar en [http://support.microsoft.com/kb/967715/es].
+
+Una vez instalado, podemos seguir las instrucciones que aparecen en el mismo enlace, y usar dos métodos:
+* Usar políticas de grupo
+* Modificar el registro a mano
+
+El método a usar dependerá de que estemos modificando, si es un sólo equipo, puede que sea más cómodo modificar el registro, pero en caso de un dominio es mucho mejor la opción de las políticas.
+
+!!Modificación del registro
+Nos vamos a una de estas dos ramas. Si queremos modificar autorun para todos los usuarios, lo haremos en: 
+
+ HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\
+
+Si queremos modificarlo sólo para el usuario actual, lo haremos en:
+
+ HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\\
+
+En la rama elegida, buscamos la entrada \'\'NoDriveTypeAutoRun\'\' y le asignamos el valor \'\'0xFF\'\'. Este valor desactiva autorun en todos los tipos de unidad.
+
+\'\'Nota: si la entrada no existe, la creamos con dipo DWORD. Tener en cuenta que el valor se indica en hexadecimal, por lo tanto escribiremos sólamente FF, el 0x indica que la base de representación es la hexadecimal.\'\'
+
+Si queremos desactivarlo sólo en algunos tipos, hay que buscar el valor correspondiente en una tabla que aparece en el enlace indicado arriba del todo.

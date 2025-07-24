@@ -1,0 +1,24 @@
+(Via [http://www.cyberciti.biz/faq/linux-change-hostname/])
+
+para cambiar el nombre de la maquina (en este ejemplo, en ubuntu y otros derivados de debian):
+
+Editamos /etc/hostname
+
+ nano /etc/hostname
+
+y cambiamos el nombre existente por el nuevo
+
+lanzamos 
+
+ hostname nombre_nuevo
+ hostname
+
+Editamos /etc/hosts
+
+ nano /etc/hosts
+
+y cambiamos el nombre viejo por el nuevo.
+
+El cambio de nombre no tiene lugar hasta que se reinice el terminal en el que estamos, y dado que hemos editado los ficheros, el nuevo nombre se mantiene entre reinicios.
+
+Importante: puede que algun servicio en la maquina tenga definido el nombre viejo en su configuracion. En estos casos, habrá que buscar y editar el fichero del servicio en cuestion.

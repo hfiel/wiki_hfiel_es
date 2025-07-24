@@ -1,0 +1,3 @@
+para cambiar la clave del usuario de openvas y poder conectarse:
+
+ openvasmd --user=USUARIO --new-password=CLAVE

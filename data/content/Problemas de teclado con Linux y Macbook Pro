@@ -1,0 +1,18 @@
+En ocasiones hay problemas de distribución de teclado con linux y el macbook pro.
+Ocurre tanto en real como ejecutando linux en una máquina virtual.
+
+En concreto, los caracteres de 3er nivel (@|[]{} etc.) no se pueden obtener de ninguna manera, dado que la tecla Alt_Gr no existe en el mac.
+
+Se soluciona desde Preferencias -> Teclado -> Distribuciones -> Opciones de distribución -> Key to choose 3rd level
+
+En la lista escogemos que tecla deseamos emplear para obtener estos caracteres, yo suelo poner la tecla Left Alt, y va bien.
+
+NOTA: en VirtualBox con el mac, las teclas º y < están intercambiadas, pero por lo demás funcionan perfectamente.
+
+
+
+-----
+
+sudo apt-get install console-data
+sudo dpkg-reconfigure console-data
+sudo dpkg-reconfigure keyboard-configuration

@@ -1,0 +1,34 @@
+Editamos el fichero ppd deseado (en /etc/cups/ppd)
+
+Creamos el papel en estos cuatro puntos:
+
+ PageSize
+ PageRegion
+ ImageableArea
+ PaperDimension
+
+Los valores se crean en puntos 
+
+Por ejemplo, para crear un papel de 600x800 (pantalla 4:3)
+
+*DefaultPageSize: Pantalla_800_600
+*PageSize Pantalla_800_600/Pantalla_800_600: "<</PageSize[600 800]/ImagingBBox null>>setpagedevice"
+*DefaultPageRegion: Pantalla_800_600
+*PageRegion Pantalla_800_600/Pantalla_800_600: "<</PageSize[600 800]/ImagingBBox null>>setpagedevice"
+*DefaultImageableArea: Pantalla_800_600
+*ImageableArea Pantalla_800_600/Pantalla_800_600: "0 0 600 800"
+*DefaultPaperDimension: Pantalla_800_600
+*PaperDimension Pantalla_800_600/Pantalla_800_600: "600 800"
+
+
+Para verificar la sintaxis, usamos el comando
+
+ cupstestppd
+
+
+
+
+Via: http://stackoverflow.com/questions/1028891/whats-the-easiest-way-to-add-custom-page-sizes-to-a-ppd
+
+
+NOTA: para que libreofice con CUPS-PDF use el papel definido, aparte de seleccionarlo en las opciones de impresora, en la pestaña de opciones del dispositivo hay que definir el lenguaje en PDF, no dejarlo en Automatico: PDF como viene por defecto. En caso de dejarlo tal cual, el papel reultante tendra el tamaño predeterminado del sistema

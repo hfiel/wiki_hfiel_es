@@ -1,0 +1,8 @@
+Si al conectar mediante putty obtienes caracteres raros:
+
+en el sistema al que conectas, mira la codificacion con:
+::echo $LANG::
+(normalmente será UTF-8, y ojo, que hay sistemas donde $LANG no esté definido, como algunos *NIX)
+
+Ajusta putty para que use esa codificacion en:
+::settings -> window --> translation --> remote character set::

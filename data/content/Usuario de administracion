@@ -1,0 +1,15 @@
+!!Usuario de administración
+
+Cuando ya tenemos creado todo, y el servidor funcionando, podemos entrar al CRUD de administración genérico que incluye django [http://127.0.0.1:8000/admin/]
+
+Pero si intentamos logarnos con alguna credencial no podemos. Para que se cree el primer usuario administrador, tenemos que hacer la primera sincronización de bd, que al detectar que no tenemos ningun superuser, nos pregunta para generar el primero:
+
+ python manage.py syncdb
+
+
+Con esto, ya podemos entrar al módulo de adminstración, y desde ahi crear usuarios y grupos, y asignar permisos
+
+
+También podemos hacerlo a mano:
+
+ python manage.py createsuperuser

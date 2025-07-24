@@ -1,0 +1,79 @@
+!Scripts
+Para facilitar los ataques, vamos a crear una serie de scripts que nos permitan
+automatizar las configuraciones de la tarjeta inalambrica.
+
+Vamos a crear los siguentes archivos en la carpeta home de nuestro usuario:
+[PONDRE EL CONTENIDO MAS ADELANTE, TRAS DEBUG]
+monitor.sh
+monitoff.sh
+prepara.sh
+repara.sh
+
+Una vez creados, debemos darles permisos de ejecución, con chmod 777 archivo.sh
+
+!Todo como estaba
+Si algo ha ido muy mal y ya no puedes conectar a ninguna red, simplemente reincia el eee: niguno de los comandos que se emplean aquí establece cambios permanentes. Al reiniciar, tu tarjeta inalámbrica estará como al principio.
+
+!Kismet
+Para que kismet funciones correctamente, en /etc/kismet/kismet.conf debemos configurar un origen de datos. En Ubuntu eee, la configuración correcta es:
+ source=madwifi_g,wifi0,wifi0
+
+!Ataques wep, con clientes activos, sin inyeccion
+Abrimos un terminal, y ponemos la tarjeta en modo monitor con
+
+ ./monitor.sh
+
+Ahora, lanzamos kismet (o airodump-ng) para localizar la información de la red
+objetivo.
+Necesitamos:
+BSSID (MAC)
+ESSID (Nombre de la red)
+Canal
+
+
+Una vez que tenemos los datos, hay que capturar paquetes.
+
+Miramos los interfaces que tenemos mediante iwconfig
+wifi0 es nuestra tarjeta, y cuando creamos interfaces para el modo monitor
+se nombran ath0, ath1...
+Vamos a quitar los athX que nos sobren, y solo nos quedamos con wifi0, mediante:
+
+sudo airmon-ng stop ath0 
+ 
+camibiando cada vez ath0 por la tarjeta que haya que eliminar.
+
+Cuando no nos quede ninguna, levantamos una nueva en el canal del objetivo:
+
+ airmon-ng start wifi0 CANAL_OBJ
+
+esto nos debe crear una nueva interfaz ath0, lista para escuchar en el canal
+indicado.
+
+Conectamos un pendrive para capturar en el los paquetes y no gastar el disco del
+eee. En el terminal, nos vamos hasta el pendrive (por lo general /media/disk/),
+y una vez alli escribimos:
+
+ airodump-ng -c CHA_OBJ --bssid MAC_OBJ -w CAPTURA IF_PROPIA
+
+donde tenemos que cambiar CHA_OBJ por el canal del objetivo, MAC_OBJ por la mac
+del objetivo, e IF_PROPIA por el nombre de nuestra interfaz, en el caso de nuestro eee es wifi0. CAPTURA es el archivo donde vamos a guardar los datos.
+
+En ese momento, deberemos empezar a capturar paquetes. La parte de arriba muestra paquetes del AP, y la de abajo los clientes conectados. Si no hay clientes, podemos dejarlo, que no vamos a ser capaces (aun) de capturar nada. Si hay clientes, se debe ver como el nº de paquetes aumenta. Si no aumenta, el cliente no navega, y no podemos hacer nada...todavía.
+
+Supongamos que hay alguien, y está navegando. El nº de paquetes aumenta de manera constante.
+
+En este paso, procedemos a desecriptar la lave wep, pero NO debemos cerrar la captura del airodump. Abrimos una nueva ventana de terminal.
+
+Hay dos métodos de ataque:
+
+- Ataque PTW: necesita unos 20.000 paquetes capturados (clave 40bits) ó 40.000 (para una clave de 128).
+
+ aircrack-ng -z CAPTURA*.cap
+
+- Ataque FMS/Korek (por defecto) es mas lento (250.000 y 1.500.000 IVs, respectivamente):
+
+ aircrack-ng output*.cap
+
+En cualquiera de los casos, si no tienes suficientes paquetes, el programa termina dando un aviso. En otro caso, se pone a crackear la clave. Si tienes muy pocos paquetes, tardará mucho. En mi caso, con 84.000 paquetes y el ataque PTW, una WEP 128 duró menos de 6 segundos, y esto usando el eee. Si mandas los archivos de captura del eee a un bicho más potente, se rompe de manera inmediata. Así que si tienes suficientes paquetes, pero la clave no sale, pon a funcionar el aircrack en una máquina más poderosa. Da igual que no tenga wifi, para romper las claves no lo necesitas.
+
+Si todo ha ido bien, aircrack-ng informa de un KEY FOUND y al final de esa línea aparece la clave en ASCII.

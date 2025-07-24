@@ -1,0 +1,79 @@
+Para poder hacer chroot de unidades con LVM, hay que montarlas, y para ello:
+
+* Identificar cual es la particion LVM:
+
+ sudo pvscan
+
+esto nos devuelve una lista de los volumenes logicos existentes (PE:)
+
+ PV /dev/sda3 VG ubuntu-vg lvm2 [148.31 GiB / 48.00 MiB free]
+ Total: 1 [148.31 GiB] / in use: 1 [148.31 GiB] / in no VG: 0 [ 0 ]
+
+En este ejemplo, el volumen (dentro de la particion sda3) es ubuntu-vg
+
+* SI ESTAMOS USANDO UN Live-CD: hay que hacer activo el volumen
+
+ sudo vgchange VOLUMEN -a y
+
+En nuestro ejemplo:
+
+  sudo vgchange ubuntu-vg -a y
+
+la salida nos indica cuantos volumenes logicos hay dentro del volumen activado PE:
+
+ 2 logical volume(s) in volume group "ubuntu-vg" now active
+
+* Escanear para localizar los volumenes lógicos
+
+ sudo lvscan
+
+nos indica los volumenes y el estado. PE:
+
+ ACTIVE '/dev/ubuntu-vg/root' [144.27 GiB] inherit
+ ACTIVE '/dev/ubuntu-vg/swap_1' [3.99 GiB] inherit
+
+De aqui obtenemos la ruta exacta al volumen (en nuestro caso /dev/ubuntu-vg/root)
+
+* Montamos el volumen, en este ejemplo lo estamos montando directamente en /mnt
+
+ sudo mount /dev/ubuntu-vg/root /mnt 
+
+
+
+* Una vez montado, podemos seguir montando el resto de directorios para tener un chroot completo (este ejemplo se hace desde un Live-CD, por lo que uso --bind para enlazar el montaje a los directorios existentes, y así tener una estructura ya funcional)
+
+ sudo mount --bind /dev /mnt/dev
+ sudo mount --bind /sys /mnt/sys
+ sudo mount --bind /proc /mnt/proc
+ sudo mount --bind /dev/pts /mnt/dev/pts
+
+* Si tenemos el arranque en otra partición (no puede estar dentro del LVM), y queremos modificar algo del mismo, tendremos que montarlo tambien.
+
+En mi caso, mi arranque (mediante grub2) esta en una particion aparte /dev/sda2. Para que me permita hacer modificaciones al grub2 (mediante grub-update) tengo que montar dicha particion dentro del montaje de /mnt ya existente, donde al haber montado el LVM debería aparecer un directorio /mnt/boot
+
+ sudo mount /dev/sda2 /mnt/boot
+
+
+* si necesitamos navegar por internet, el sistema dentro del chroot necesita DNS, asi que enlazamos el resolv.conf
+
+ sudo mount --bind /etc/resolv.conf /mnt/etc/resolv.conf
+
+
+* Una vez que todo esta montado, lanzamos el chroot:
+**NOTA: puede que en tu caso particular necesites montar mas directorios, este es un ejemplo con lo basico para poder lanzar ciertos programas, como el mencionado grub-update**
+
+ sudo chroot /mnt
+
+Cuando hemos acabado, salimos de la jaula chroot con un:
+
+ exit
+
+* al salir, recuerda desmontar en sentido inverso (boot y resolv.conf, solo si los montaste).
+
+
+ sudo umount /mnt/etc/resolv.conf
+ sudo umount /mnt/boot
+ sudo umount /mnt/proc
+ sudo umount /mnt/sys
+ sudo umount /mnt/dev
+ sudo umount /mnt/

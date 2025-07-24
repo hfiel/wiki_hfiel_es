@@ -1,0 +1,12 @@
+!Como configurar la raspberry para que admita el teclado Logitech k400r en español
+
+Para que funcione en consola:
+
+Configurarlo mediante raspi-config como un Logitech EX110, y el idioma en Español
+
+
+Para que funcione en las X:
+editamos /etc/X11/xinit/xinitrc
+
+y añadimos la linea:
+setxkbmap es

@@ -1,0 +1,10 @@
+Usando las funciones de búsqueda y remplazo con las expresiones regulares, podemos limpiar espacios en blanco que aparezcan antes del texto:
+
+
+Hay que activar las opciones regulares
+
+Poner como busqueda:
+
+ ^\s+|\s+$ 
+
+Dejamos vacio el campo de reemplazo

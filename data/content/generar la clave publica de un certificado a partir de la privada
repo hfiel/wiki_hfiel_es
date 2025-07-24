@@ -1,0 +1,3 @@
+Cuando sólo tenemos un .pem con la clave privada, podemos regenerar la parte publica mediante un:
+
+ ssh-keygen -y -f privada.pem > publica.pub

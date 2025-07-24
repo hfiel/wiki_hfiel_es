@@ -1,0 +1,129 @@
+!Como configurar el modem 3G alcatel x060s en la raspberry
+
+EN DESARROLLO... 
+
+ IMPORTANTE: la imagen de raspbian incluida en el noobs installer no esta actualizada, y tiene algunos errores que impiden que funcione correctamente usbserial con este dispositivo. Usando la imagen de raspbian independiente todo funciona bien
+
+Lo primero, este modem 3G USB requiere demasiada potencia para la raspberry. Hay que conectarlo a través de un HUB USB con alimentación externa para evitar que la raspberry se reinicie al desconectarlo.
+
+Este modem tiene una particion donde vienen incluidos los drivers para windows (asi no es necesario ningun CD para instalarlos), pero en linux esto hace que el dispositivo se reconozca como una unidad de almacenamiento USB.
+
+si hacemos lsusb veremos que nos muestra el dispositivo, pero aparece:
+
+Bus 001 Device 016: ID 1bbb:f000 T & A Mobile Phones
+
+ese f000 es el que nos fastidia y nos evita acceder al modem.
+
+Necesitamos instalar usb_modeswitch para que desactive el almacenamiento y nos permita ver el modem.
+
+sudo apt-get install usb-modeswitch
+
+(notar que es un guión normal, aunque luego los ficheros del programa se nombran con guion bajo)
+
+En la pagina web de usb_modesiwtch hay una base de datos de referencia de dispositivos [http://www.draisberghof.de/usb_modeswitch/device_reference.txt]. Buscamos el nuestro y en la raspberry editamos el fichero de configuracion de nodeswitch:
+
+ sudo nano /etc/usb_modeswitch.conf
+
+
+y al final del todo añadimos los valores adecuados que nos da la web:
+
+
+########################################################
+# Alcatel X200/X060S
+
+DefaultVendor=  0x1bbb
+DefaultProduct= 0xf000
+
+TargetVendor=   0x1bbb
+TargetProduct=  0x0000
+
+MessageContent=\"55534243123456788000000080000606f50402527000000000000000000000\"
+########################################################
+
+
+lo que hace esto es decirle a modeswitch que cuando detecte el dispositivo con el vendedor 1bbb y producto f000 le cambie el producto a 0000, y para lograrlo va a enviar al dispositivo el mensaje indicado.
+
+Solo tenemos que desenchufar y volver a enchufar el modem.
+
+Si nos ponemos a mirar el syslog
+
+tail -f /var/log/syslog
+
+vemos que efectivamente aparece conectado el 0xf000, se desconecta y vuelve a aparecer como 0x0000:
+
+Sep 14 11:33:52 raspberrypi logger: usb_modeswitch: switched to 1bbb:0000 on 001/016
+
+y ademas para confirmar el cambio, vemos que cambia el acceso a direct access:
+
+Sep 14 11:33:53 raspberrypi kernel: [ 8167.415341] scsi 9:0:0:0: Direct-Access     USBModem MMC Storage      2.31 PQ: 0 ANSI: 2
+
+lo que indica que ha logrado pasar del almacenamiento al segundo dispositivo
+
+Lo que a nosotros nos interesa es buscar estas líneas en la salida de syslog:
+
+Sep 15 00:26:07 raspberrypi kernel: [  128.827388] usb 1-1.3.1: GSM modem (1-port) converter now attached to ttyUSB0
+Sep 15 00:26:07 raspberrypi kernel: [  128.842127] option 1-1.3.1:1.1: GSM modem (1-port) converter detected
+Sep 15 00:26:07 raspberrypi kernel: [  128.847336] usb 1-1.3.1: GSM modem (1-port) converter now attached to ttyUSB1
+Sep 15 00:26:07 raspberrypi kernel: [  128.847888] option 1-1.3.1:1.3: GSM modem (1-port) converter detected
+Sep 15 00:26:07 raspberrypi kernel: [  128.854651] usb 1-1.3.1: GSM modem (1-port) converter now attached to ttyUSB2
+
+Aqui vemos que se ha detectado un modem GSM, y que ademas se ha asignado a los dispositivos serie ttyUSB0, ttyUSB1, y ttyUSB2.
+
+Para nosotros es lo mismo, vamos a usar el ttyUSB2.
+
+Ahora podemos comunicarnos con el modem. Para esto usamos por ejemplo minicom (no viene por defecto en raspbian, lo instalamos)
+
+sudo apt-get install minicom
+
+y configuramos el puerto a usar (lo hacemos con sudo para que pueda guardar la configuracion):
+
+sudo minicom -s
+
+En las opciones que aparecen, seleccionamos (mediante los cursores):
+
+Configuración de la puerta serial
+
+Nos aparece la ventana de configuracion serie, pulsamos A para editar el dispositivo actual y lo cambiamos del valor por defecto (/dev/modem) al valor de nuestro dispositivo (/dev/ttyUSB2). Pulsamos enter, y de nuevo enter. Volvemos a estar en la pantalla principal de configuracion. Marcamos la opcion:
+
+Salvar configuración como dfl 
+
+Y esto nos guarda la configuracion en disco.
+
+Seleccionamos la opción:
+
+Salir del Minicom
+
+y volvemos a estar en la shell.
+
+Ahora podemos lanzar minicom sin sudo (tomará la configuración que hayamos guardado).
+
+minicom
+
+Y ya podemos lanzar comandos AT al modem.
+El primero que debemos lanzar es
+
+ATI
+
+que debe devolver informacion sobre el dispositivo (fabricante, modelo, revision, IMEI, opciones disponibles)
+
+Algunos comandos utiles son:
+
+AT+CGMI
+
+indica el fabricante
+
+AT+CGMM
+
+indica el modelo
+
+AT+CGMR
+
+version del firmware
+
+AT+CGSN
+
+IMEI del dispositivo
+
+AT+CPIN=1234
+
+para mandarle el PIN a la tarjeta (en lugar de 1234 ponemos el nuestro)

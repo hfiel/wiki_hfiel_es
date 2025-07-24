@@ -1,0 +1,33 @@
+**Nota: esto lo hice en 2009. Las cosas habrán cambiado (y mucho). **
+!Detalles que pueden fallar:
+
+!!Temperatura
+Los ventiladores por defecto están a 2000 rpm, y el equipo se calienta mucho.
+Para ver la velocidad y temperaturas, instalamos el paquete lm-sensors
+
+para modificar la velocidad mínima, en el fichero /etc/rc.local
+antes de la linea exit 0, ponemos
+echo 4500 > /sys/devices/platform/applesmc.768/fan1_min
+echo 4500 > /sys/devices/platform/applesmc.768/fan2_min
+
+En mi caso, he puesto a 4500 para que baje un poco la temperatura, con menos velocidad casi no se nota la diferencia.
+
+!!Sonido
+La detección automática puede fallar, si no hay sonido, añadir al archivo
+/etc/modprobe.d/options la línea
+options snd_hda_intel model=mbp3
+
+
+!!Teclado
+Para poder tener acceso al tercer caracter (Alt Gr), vamos a 
+sistema - preferencias - teclado - distribuciones - opciones de distribucion
+y alli, en la seccion Key to choose 3rd level marcamos la tecla que deseamos usar. Yo he puesto Right Win (que corresponde a la tecla comando a la derecha de la barra espaciadora)
+
+Para invertir el comportamiento de la tecla Fn, en el fichero que creamos antes en /etc/modprobe.d/options añadimos la línea:
+
+options hid pb_fnmode=2
+
+
+
+!!Avanzar por las paginas del terminal
+La combinacion Shift Left + FN + AvPag/RePag te mueve por las paginas del terminal.

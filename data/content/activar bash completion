@@ -1,0 +1,9 @@
+Bash completion se encuentra activado solamente para los comandos de vyatta. Si desea habilitarlo para los comandos linux, puedes hacerlo de manera puntual o fija:
+
+!!Puntual:
+Lanza el comando:
+::source /etc/bash_completion::
+
+!!Fija
+En la carpeta home del usuario donde quieras activar bash completion, edita el fichero .bashrc y añade una nueva línea (ya deberían aparecer un par de líneas relativas a los comandos de vyatta, pon la nueva linea debajo):
+::source /etc/bash_completion::

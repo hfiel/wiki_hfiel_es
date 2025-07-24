@@ -1,0 +1,25 @@
+Se puede usar pwgen.
+
+ó
+
+Mediante el paquete apg:
+
+ apg -M SNCL -a 1 -m 12 -x 12
+
+donde
+
+ -M SNCL
+
+indica que se deben usar símbolos, numeros, mayusculas y minusculas
+
+ -a 1
+
+Indica que se use el generador pseudo-random
+
+ -m 12
+
+Longitud mínima
+
+ -x 12
+
+Longitud máxima

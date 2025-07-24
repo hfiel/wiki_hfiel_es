@@ -1,0 +1,21 @@
+!Como utilizar VNC para controlar de forma remota una máquina virtual de ESXi
+
+ESXi permite controlar una máquina virtual mediante un visor VNC, evitando de esta forma tener que abrir VSphere Cliente cada vez que necesitemos gestionar la máquina.
+
+Se consigue añadiendo tres líneas al fichero de configuración de la máquna virtual:
+
+ RemoteDisplay.vnc.enabled= \"TRUE\"
+ RemoteDisplay.vnc.port = 5901
+ RemoteDisplay.vnc.password = \"CLAVE\"
+ RemoteDisplay.vnc.keymap=\"es\"
+
+Ten en cuenta que deberás cambiar CLAVE por la contraseña de acceso que quieras usar, así como modificar 5901 por el puerto que quieras usar para conectarte.
+
+La última línea establece el idioma del teclado a usar en el equipo cliente (desde el que te conectas). Si no la configuras, por defecto toma un teclado inglés, y no podrás utilizar las teclas especiales (como ñ, @...).
+
+El fichero a cambiar es el NOMBRE.vmx que estará almacenado en el datastore de ESXi, y cuyo nombre coincida con el de tu máquina virtual. Debes copiar el fichero del datastore a tu equipo, modificarlo, y volver a subirlo, o bien añadir cada linea junto con su valor desde la configuración de la máquina en VSphere Client.
+
+!Importante: sobre la seguridad
+Ten en cuenta que la conexión VNC no va encriptada. La clave que se configura es para efectuar la conexión, pero todo lo que se envía y recibe entre cliente y máquina virtual (incluyendo las pulsaciones de teclado, y por lo tanto las contraseñas que se escriban) viaja en plano. Cualquier usuario que tenga acceso a tu red y pueda capturar los paquetes de la transmisión verá todo lo que hagas.
+
+Por lo tanto, esto es útil en un entorno de pruebas, en tu casa o similar, pero no se te ocurra ponerlo para conectarte a tu máquina desde fuera a través de internet.

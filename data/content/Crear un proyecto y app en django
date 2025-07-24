@@ -1,0 +1,56 @@
+!!Proyecto
+
+Para crear un proyecto (ver antes como instalar django, se entiende que todo esto se hace con django instalado a nivel de sistema, o en un virtualent con el mismo ya activado):
+
+En el directorio donde lo queramos crear, ponemos:
+
+ django-admin startproject nombre_del_proyecto
+
+la carpeta nombre_del_proyecto se crea de forma automática, incluyendo la estructura adecuada con los ficheros .py necesarios. Notar que el nombre de la carpeta en sí es indiferente, a django le da igual cómo se llame, o incluso si luego le cambiamos el nombre.
+
+Lo primero será configurar nombre_del_proyecto/nombre_del_proyecto/settings.py con los valores de bbdd (si vamos a usar SQLite, no hya que tocar nada) y como mínimo la zona horaria (en mi caso, Europe/Madrid)
+
+El proyecto tiene definidas una serie de aplicaciones ya "instaladas" (el sitio de administracion, gestion de sesiones, autenticación...). Si alguna en concreto no la necesitamos, podemos comentarla en el fichero para no usarla. Muchas de estas aplicaciones necesitan de tablas en la bbdd, y para que se creen, una vez que hayamos configurado adecuadaa el fichero, hacemos lo siguiente, desde la carpeta raíz del proyecto (nombre_del_proyecto/)
+
+ python manage.py migrate
+
+Esto nos crea las tablas adecuadas (si lo que tenemos es un SQLite, nos crea un fichero (del estilo db.sqlite3, según la versión de SQLite que tengamos) en la carpeta raíz del proyecto.
+
+Además, nos genera los .pyc de los ficheros __init__.py y settings.py
+
+En caso de estar usando algún sistema de control de versiones, estos tres ficheros (db y los dos pyc) deberíamos omitirlos, dado que en el control sólo debería haber código, y nunca nada que se pueda generar a partir del mismo (como es el caso con estos ficheros).
+
+De hecho, en el caso concreto de git, una de las primeras cosas sería configurar el fichero .gitignore en la raiz de nuestro directorio local.
+(ver [https://help.github.com/articles/ignoring-files/], [https://github.com/github/gitignore] y [https://gist.github.com/octocat/9257657])
+
+
+!!Probar el proyecto
+
+En la carpeta raiz, lanzamos
+
+ python manage.py runserver
+
+
+Esto nos montará el servidor de desarrollo de django en la ubicación: [http://127.0.0.1:8000/]
+
+OJO: es de desarrollo: es una locura siquiera pensar usarlo para producción.
+
+Si accedemos con el navegador, deberemos ver una página de bienvenida (que lógicamente no tendrá nada aún). Es más, si hemos dejado las aplicaciones por defecto, tendremos un sitio de administración (en [http://127.0.0.1:8000/admin] al que aún no podremos entrar porque no tenemos definido ningún superusuario).
+
+
+
+!!App
+
+En la ubicación donde se encuentre manage.py (que será la carpeta nombre_del_proyecto) la aplicacion se crea con:
+
+ python manage.py startapp nombre_de_la_app
+
+lo que crea una carpeta nombre_de_la_app
+
+Lo siguiente será editar nuestro fichero nombre_de_la_app/models.py para definir los modelos de la base de datos.
+
+
+!!Tutorial de Django
+Para un paso a paso, ver el tutorial:
+
+[https://docs.djangoproject.com/en/1.8/intro/tutorial01/]

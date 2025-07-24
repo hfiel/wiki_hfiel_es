@@ -1,0 +1,31 @@
+! SCP
+
+Ejemplos tomados de [http://kb.iu.edu/data/agye.html], no he podido resistirme al poder del lado oscuro :D
+
+En todos los ejemplos, dvader es la cuenta de usuario en la maquina remota
+
+scp de un fichero desde la maquina actual a la remota (deathstar.com):
+
+  scp ~/rebels.txt dvader@deathstar.com:~/revenge
+
+
+scp de un directorio completo (recursivo) desde la maquina remota (deathstar.com) a la actual
+
+ scp -r dvader@deathstar.com:~/revenge ~/revenge
+
+
+Con comodines (todos los txt) desde deathstar.com a la actual (Recuerda las comillas dobles)
+
+ scp dvader@deathstar.com:\"revenge/*.txt\" ~/revenge/
+
+
+
+Y para rizar el rizo, de una remota a otra remota:
+
+ scp dvader@empire.gov:~/luke.txt dvader@deathstar.com:~/revenge
+
+En este ultimo caso, nos pide la clave de dvader dos veces (podrían utilizarse dos usuarios distintos)
+
+
+
+NOTA: si la cosa va muy lenta, puedes usar el modificador -C (C mayúscula) justo después de scp para que comprima el flujo de datos. Ten en cuenta que puede implicar sobrecarga de CPU es sistemas muy pequeños como routers y similares.

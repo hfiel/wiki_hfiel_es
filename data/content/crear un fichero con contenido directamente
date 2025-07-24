@@ -1,0 +1,4 @@
+cat << EOF > testfile
+probando1
+probando2
+EOF

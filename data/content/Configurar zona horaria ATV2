@@ -1,0 +1,26 @@
+!Configurar la zona horaria del ATV2
+
+!!Actualizado: la nueva version de iOS (4.3.3) ya ofrece la posibilidad de escoger la zona horaria. No es necesario llevar a cabo este proceso.
+
+Tras instalar XMBC, observé que la hora del sistema era incorrecta. El ATV2 no tiene ninguna opción para cambiar la hora (porque realmente no necesitas la hora para nada con el SW oficial).
+
+Buscando en varios sitios encontré soluciones referentes a cambiar la zona horaria mediante el mecanismo de TimeZone incorporado en el sistema (que no deja de ser un sistema Unix). Y funciona de lujo:
+
+* Nos conectamos al ATV2 por ssh (como root) y ponemos los siguientes comandos:
+
+ cd /private/var/db/timezone
+ rm localtime
+ ln -s /usr/share/zoneinfo/Europe/Madrid localtime
+
+Lógicamente, habrá que ajustar la zona deseada a nuestra zona concreta. En [http://en.wikipedia.org/wiki/List_of_tz_database_time_zones] puedes encontrar una lista de las existentes.
+
+* Una vez listo, reiniciamos el ATV2 (una forma que no falla es pulsar \'\'Menu\'\' + \'\'abajo\'\' durante unos 6 segundos).
+
+* Listo, el ATV2 actualiza la hora con la nueva zona.
+
+PD: Por defecto, el servidor ntp que viene configurado es time.apple.com. Si quieres cambiarlo (por ejemplo, para usar uno interno de tu LAN), se hace en el fichero:
+
+ /private/var/mobile/Library/Preferences/ntp.conf
+
+
+\'\'Original sobre la zona horaria: [http://www.puromac.com/forosmac/viewtopic.php?f=5&t=12010&start=148]\'\'

@@ -1,0 +1,56 @@
+!Cambiar disco o configuracion
+
+Situacion: tenemos dos nodos con DRBD y un recurso (r0) compartido entre ellos y correctamente sincronizado.
+
+Queremos cambiar el disco o la configuracion en uno (o los dos nodos) sin perder datos.
+
+Los pasos son (en uno de los dos nodos):
+
+* Desconectamos el recurso:
+
+ drbdadm disconnect r0
+
+* "Detachamos" el recurso del drbd
+
+ drbdadm detach r0
+
+* Por precaucion mental propia, yo suelo deshabilitar el servicio drbd para evitar que intente arrancar en el inicio de forma automatica hasta que haya verificado que todo es correcto.
+
+ systemctl disable drbd
+ systemctl stop drbd
+
+* Hacemos los cambios en la configuracion del recurso en el drbd, o apagamos el sistema y cambiamos el disco... lo que sea necesario
+
+* Reiniciamos el sistema y verificamos que el hardware esta reconocido correctamente.
+
+* Regeneramos los metados del nuevo dispositivo
+
+ drbdadm create-md r0
+
+* Levantamos el dispositivo, comienza a sincronizar
+
+ drbdadm up r0
+
+* Verificamos el estado de la sincronizacion
+
+ drbdadm status r0
+
+* Cuando todo este correcto y sincronizado, volvemos a habilitar el servicio drbd
+
+ systemctl enable drbd
+ systemctl start drbd
+
+
+Cuando todo este completado, podemos hacer lo mismo en el nodo 2 si es necesario.
+
+
+!drbdmanage
+
+consultar a drbdmanage con perl https://www.linbit.com/en/fun-with-drbdmanage/
+
+
+!drbdsetup
+
+ver estadisticas y estado detallado de un recurso (r0)
+
+ drbdsetup status r0 --verbose --statistics

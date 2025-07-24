@@ -1,0 +1,9 @@
+!ESXi
+[Activar VNC en una VM de ESXi]
+[Evitar que la VM de ESXi utilize la swap]
+[Instalar VMWare Tools en Zentyal]
+!OpenStack
+[Instalar packstack Kilo en CentOS 7]
+[Limpiar una instalacion de packstack]
+!VirtualBox
+[Virtualbox cambia la interfaz de red en maquina CentOS clonada]

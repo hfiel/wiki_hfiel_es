@@ -1,0 +1,21 @@
+Tengo un Xubuntu instalado en una máquina algo antigua que no admite drivers privativos de video.
+
+
+Esta máquina me daba un error al abrir DVD Video usando VLC.
+
+* Instalamos libdvdread4
+
+ sudo apt-get install libdvdread4
+
+* Lanzamos la instalación de libdvdcss
+
+ sudo /usr/share/doc/libdvdread4/install-css.sh
+
+
+
+Una vez instalado, VLC ya puede abrir el video, pero se ve a saltos, y al ponerlo en pantalla completa la imagen se queda congelada.
+
+* En las preferencias de video de VLC:
+ Herramientas -> Preferencias -> Video -> Salida
+
+Donde pone ''Automatica'' seleccionamos otra salida, en mi caso la mejor opción ha sido ''Salida de video X11 (XCB)'', pero puede que tengas que probar con otras opciones.

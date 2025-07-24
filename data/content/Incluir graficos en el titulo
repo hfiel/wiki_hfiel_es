@@ -1,0 +1,16 @@
+Por defecto, Latex no permite incluir gráficos en el título (de hecho, no se puede añadir ninguna imagen hasta que no ha salido al menos un caracter, o si no protesta).
+
+Alguien ha pensado en la solución, y ha creado un paquete para hacerlo. Sólo hay que incluirlo de la forma regular (usepackage) y ya podemos emplear el comando:
+ \\titlepic{\\includegraphics[width=\\textwidth]{imagen.jpg}}
+que se añade a \\title, \\author y \\date antes de llamar a \\maketitle.
+
+Esto genera una imagen centrada en el titulo.
+
+Notar que el tamaño se puede ajustar a lo necesario de la misma forma que en cualquier tamalo de Latex (ya sea en medidas absolutas o relativas). Por ejemplo, se puede indicar [witdh=3cm].
+
+Enlace:
+[http://typethinker.blogspot.com/2008/08/picture-on-title-page-in-latex.html]
+
+OJO: recuerda que para incluir cualquier tipo de fichero gráfico, hay que incluir:
+ \\usepackage{graphicx}
+y que los formatos aceptables dependen del entorno en el que trabajes (PE, en Unix normalmente sólo se acepta eps, mientras que otros entornos admiten PDF, png, jpg...)

@@ -1,0 +1,68 @@
+!FALTA LIMPIARLO
+
+Via: [http://www.mariomix.net/mariomix-blog/2006/11/hacking-la-fonera-parte-3/]
+
+1. Download Putty, a client SSH.
+2. Create a html file (i.e. first.html) using this code:
+          <html>
+          <head></head><body><center>
+          <form method=\"post\" action=\"http://169.254.255.1/cgi-bin/webif/connection.sh\" enctype=\"multipart/form-data\">
+          <input name=\"username\" value=\"$(/usr/sbin/iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT)\" size=\"68\" />
+          <input type=\"submit\" name=\"submit\" value=\"Submit\" />
+          </form>
+          </center></body></html> 
+
+3. Create a html file (i.e. second.html) using this code:
+
+          <html>
+          <head></head><body><center>
+          <form method=\"post\" action=\"http://169.254.255.1/cgi-bin/webif/connection.sh\" enctype=\"multipart/form-data\">
+          <input name=\"username\" value=\"$(/etc/init.d/dropbear)\" size=\"68\" ><input type=\"submit\" name=\"submit\" value=\"Submit\" />
+          </form>
+          </center></body></html> 
+
+4. Set the PC’s ethernet port:
+          * IP: 169.254.255.2
+          * Subnet mask: 255.255.255.0
+          * Gateway: 169.254.255.1
+          * DNS: 169.254.255.1
+
+5. Connect La Fonera’s ethernet cable beetween PC and La Fonera. (Attend some seconds)
+
+
+6. Open first.html in browser and click Submit. If required, use “admin” as user and “admin” as password (default La Fonera’s password if you didn’t change it).
+
+7. Open second.html in browser and click Submit. If required, use “admin” as user and “admin” as password (default La Fonera’s password if you didn’t change it).
+
+8. Open Putty, use 169.254.255.1 as “host name” and click “Open”.
+      In the shell, use “root” as user and “admin” as password (default La Fonera’s password if you didn’t change it).
+
+9. In the shell, type:
+      mv /etc/init.d/dropbear /etc/init.d/S50dropbear
+      and press ENTER.
+
+10. Type:
+      vi /etc/firewall.user
+      and press ENTER.
+ 
+11. VI is now opened. Type “i” to edit. Uncomment this two lines removing # (and the space) to the line’s beginning:
+      # iptables -t nat -A prerouting_rule -i $WAN -p tcp –dport 22 -j ACCEPT
+      # iptables -A input_rule -i $WAN -p tcp –dport 22 -j ACCEPT
+
+12. Press ESC and type “:wq” then ENTER to save and to close VI.
+
+13. Type:
+      vi /bin/thinclient
+      and press ENTER.
+
+14. VI is now opened. Type “i” to edit. Comment:
+      . /tmp/.thinclient.sh
+      adding # to the line’s beginning (this disable the automatic update of FON).
+      Under #. /tmp/.thinclient.sh add:
+      cp /tmp/.thinclient.sh /tmp/thinclient-$(date \'+%Y%m%d-%H%M\')
+      to save a backup of new FON’s updates in a temporany directory.
+
+15. Press ESC and type “:wq” then ENTER to save and to close VI.
+ 
+
+From now a SSH server will be always started on La Fonera.

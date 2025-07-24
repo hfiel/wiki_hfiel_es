@@ -1,0 +1,8 @@
+Durante la migracion de una BBDD MySQL Windows a Linux puede haber problemas porque Linux tiene en cuenta las mayusculas y minusculas.
+
+Una solucion puede ser forzar al MySQL en Linux a usar solamente minusculas en las operaciones de nombrado de tablas.
+
+Para lograrlo, editamos el fichero de configuracion de MySQL (/etc/mysql/my.cnf) y en la seccion mysqld incluimos la linea:
+ lower_case_table_names = 1
+
+A partir de ese momento, todas las operaciones de creación y nombrado de tablas que se hagan en la bbdd se harán siempre en minusculas, sin importar que la orden venga con el nombre en mayusculas o minusculas

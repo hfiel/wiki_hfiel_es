@@ -1,0 +1,5 @@
+Para poder usar drush 7 los requisitos minimos son php 5.4.X.
+
+En Centos 6 el maximo php de paqueteria es 5.3.3.
+
+En esa versión, si no se puede subir php mediante phpbrew, la unica opcion es usar drush 6

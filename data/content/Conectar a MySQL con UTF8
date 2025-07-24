@@ -1,0 +1,8 @@
+Situación: tienes tu flamante página PHP en UTF-8. Tu BBDD hiper-mega-formalizada en UTF-8. Y cuando muestras los registros en pantalla, te empieza a escupir ::?:: por todas partes.
+
+Cuando conectamos a una BBDD MySQL con cotejamiento UTF-8, hay que indicarle al conector que vamos a emplear esa codificación. Una vez que tenemos la conexión hecha, mandamos una primera \"consulta\" al motor:
+ mysql_query(\"SET NAMES ’utf8’\")
+
+y con eso, ya sabe que queremos que devuelva los datos en esa codificación.
+
+Cómo es lógico, si tu BBDD no está en UTF esto no tiene sentido.

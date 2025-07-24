@@ -1,0 +1,12 @@
+Cuando hacemos que Visual Basic .NET escriba algo en fichero (me refiero de forma automática, como haciendo un parser, no \"picando código\" a mano), la codificación por defecto es Latin-1, maravillosa si vives en un mundo sólo windows, pero inutil si necesitas algo más universal, como UTF-8.
+
+Este codigo muestra como escribir una cadena como UTF-8. A partir de aquí, a investigar cada cual en su necesidad.
+
+ \' Write the string as utf-8.
+ \' This also writes the 3-byte utf-8 preamble at the beginning of the file.
+ Dim appendMode As Boolean = False \' This overwrites the entire file.
+ Dim sw As New StreamWriter(\"out_utf8.txt\", appendMode, System.Text.Encoding.UTF8)
+ sw.Write(TextBox1.Text)
+ sw.Close()
+
+(Código vía: [http://www.example-code.com/vbdotnet/saveUtf-8.asp|Example-Code])

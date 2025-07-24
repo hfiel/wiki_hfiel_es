@@ -1,0 +1,9 @@
+http://www.cyberciti.biz/faq/what-process-has-open-linux-port/
+
+
+Resumen:
+
+ sudo netstat -tulpn
+
+
+ sudo ls -l /proc/<PID>/exe

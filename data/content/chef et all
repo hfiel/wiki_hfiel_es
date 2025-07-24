@@ -1,0 +1,47 @@
+Instalacion de chef:
+
+
+curl -L https://www.chef.io/chef/install.sh | sudo bash
+
+
+esto instala tambien knife
+
+
+El fichero knife.rb debe estar dentro de un directorio .chef (ya sea en el home, o en donde queramos tener configurado el proyecto), pero siempre dentro de un .chef
+
+necesitamos un .pem del chef para poder usarlo con el knife.rb
+
+configuramos el knife.rb con la ruta al pem y la ip del chef server
+
+
+
+COMANDOS KNIFE:
+
+ knife node list
+
+ knife role list
+
+Este se trae los certificados ssl del servidor, para evitar que de error de conexion
+
+ knife ssl fetch
+
+
+ knife ssl check
+
+
+
+NOTA: si da error de ssl porque el certificado va firmado para localhost, hay que cambiar el fichero etc/hosts para "engañarlo". Cuidado con esto. Si se hace, tambien hay que adaptar el knife.rb para que apunte a localhost en lugar de la ip
+
+
+para subir un cookbook:
+
+ knife cookbook upload -o ./ carpeta_con_el_cookbook
+
+para borrar una version concreta de un cookbook (en este caso, hay que dar el nombre del cookbook):
+
+ knife cookbook delete COOKBOOK VERSION
+
+
+para sacar el nombre:
+
+ knife cookbook list

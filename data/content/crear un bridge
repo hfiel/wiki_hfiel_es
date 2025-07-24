@@ -1,0 +1,68 @@
+pasos para crear un bridge para usarlo en qemu.
+
+Queremos un bridge br0 que enlace a eth0. De esta forma, las maquinas en qemu que usen el bridge serán visibles desde el anfitrión y desde fuera
+
+Instalamos bridge utils
+
+ sudo apt-get install bridge-utils
+
+Añadimos un bridge (br0):
+
+ sudo brctl addbr br0
+
+Añadimos la interfas eth0 al br0:
+
+ sudo brctl addif br0 eth0
+
+Configuramos br0 en /etc/network/interfaces (ajustamos los valores segun nuestra red)
+
+ auto br0
+ iface br0 inet static
+      address 192.168.1.11
+      netmask 255.255.255.0
+      network 192.168.1.0
+      broadcast 192.168.1.255
+      gateway 192.168.1.1
+      bridge_ports eth0
+      bridge_stp on
+      bridge_maxwait 0
+      bridge_fd 0
+
+
+Levantamos la interfaz
+
+ sudo ifup br0
+
+aUna vez que la interfaz esté disponble, tenemos que agregar la red a la configuracion de qemu.
+
+Creamos un fichero host-bridge.XML con la configuracion base:
+
+       <network>
+        <name>host-bridge</name>
+        <forward mode="bridge"/>
+        <bridge name="br0"/>
+      </network>
+
+OJO: este fichero será gestionado por virsh a partir de ahora.
+
+Agregamos la red (usamos net-define para que sea persistente):
+
+ sudo virsh net-define host-bridge.xml
+
+Si lo hacemos con net-create en lugar de net-define, se crea una red transitoria, que se elimina al reiniciar.
+
+La red ya debe aparecer en la lista de redes disponibles:
+
+ virsh net-list --all
+
+Para la que la red se autoinicie al arrancar, usando el nombre definido:
+
+ virsh net-autostart host-bridge
+
+Para arrancar la red:
+
+ virsh net-start host-bridge
+
+Si necesitamos eliminarla, usamos el nombre que hayamos definido:
+
+ sudo virsh net-destroy host-bridge

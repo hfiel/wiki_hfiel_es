@@ -1,0 +1,1 @@
+rsync -avzh usuario@servidor:/ruta/al/directorio/ /ruta/al/destino

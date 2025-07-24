@@ -1,0 +1,107 @@
+!!Instalar Django en Ubuntu:
+
+NOTA: estos pasos son para isntalar django en un entorno virtual, de forma que no afecte a nuestro sistema completo.
+
+lo primero es verificar que tenemos python (en este caso, python 2.7). ya debería venir instalado.
+
+ python --version
+ >>> Python 
+
+Si por alguna razon no lo tenemos: 
+
+ sudo apt-get install python2.7
+
+Además, para facilitar el desarrollo ponemos ipython, pra tener una consola interactiva molona y a colores:
+
+ sudo apt-get install ipython
+
+Para usar Django, necesitamos una base de datos, y en este caso aprovecharemos que podemos usar SQLite
+
+ sudo apt-get install sqlite
+
+para la instalacion de Django, usaremos pip, que se incluye dentro del paquete de python setuptools:
+
+ sudo apt-get install python-setuptools
+
+Si por alguna oscura razón pip no se instalara, lo podemos poner con:
+
+ sudo apt-get install python-pip
+
+NOTA: usamos pip en lugar de easy_install porque este ofrece más funcionalidades [https://stackoverflow.com/questions/3220404/why-use-pip-over-easy-install]. Para no enrollarnos: con pip podemos hacer algo básico como es deinstalar un paquete con la orden:
+
+ pip uninstall <paquete>
+
+Antes de seguir con la instalación, vamos a instalar virtualenv. Esto nos permite hacer la la instalación en una carpeta, sin que afecte a todo el sistema ([https://virtualenv.pypa.io/en/latest/]).
+
+Para instalarlo, lo hacemos desde pip:
+
+ sudo pip virtualenv
+
+NOTA: tambien lo podemos instalar desde el gestor de paquetes, pero es posible que tenga otras versiones más antiguas, y ya que tenemos pip...:
+
+ sudo apt-get install python-virtualenv
+
+
+Una vez lo tenemos, hay que crear nuestro entorno. En primer lugar, nos vamos a la carpeta donde queramos crear nuestro entorno virtual. Como ejemplo, pongo la carpeta entornovirtual (podemos crearla donde queramos, pero nuestra home es un buen sitio... precisamente lo que no queremos es marear al entorno real):
+
+ mkdir entornovirtual && cd entornovirtual
+
+Creamos el entorno virtual para mi django (lo llamare virtualdjango):
+
+ virtualenv --no-site-packages virtualdjango
+
+NOTA: la opcion --no-site-packages evita que se use el directorio de paquetes principal, lo que nos permite aislar por completo nuestro entorno virtual
+
+Activamos el entorno virtual que hemos creado:
+
+ source virtualdjango/bin/activate
+
+Esto lo haremos cada vez que queramos entrar en el entorno.
+
+El prompt debe cambiar para indicar que estamos en un entorno virtual, poniendo al principio (virtualdjango) incluyendo los paréntesis
+
+Una vez en el entorno, todo lo que agregemos al mismo (es decir, cualquier cosa que pongamos mediante pip) sólo afectará al entorno.
+
+NOTA: para salir del entorno virtual usamos:
+
+ deactivate 
+
+
+Si ahora entramos en la carpeta de nuestro entorno:
+
+ cd virtualdjango
+
+y verificamos lo que hay dentro, veremos una estructura de carpetas (bin, lib, ...) que son lo que permite que podamos usar el entorno de forma aislada al resto de nuestro sistema.
+
+Una vez dentro, vamos a instalar de verdad django (usando pip):
+OJO: hay que estar con el entorno virtual activado, sino lo hacemos 1) estaremos intentando instalar a nivel de sistema 2) fallará porque no lo estamos lanzando con sudo. Es precisamente para evitar estas dos cosas que usamos el virtualenv
+
+ pip install Django
+
+Con esto ya tenemos Django en nuestro entorno, en este ejemplo estará en:
+
+ virtualdjango/lib/python2.7/site-packages
+
+Vamos a verificar que todo es correcto. Abrimos el intérprete interactivo:
+
+ ipython
+
+Y en la consola ponemos:
+
+ import django
+ print(django.get_version())
+
+lo cual nos devolverá la versión de django instalada.
+
+¡Listos! Ya tenemos django en nuestro entorno.
+
+Recordar que cada vez que queramos acceder o salir, habrá que activar y desactivar el entorno virtual
+
+Y lo mas importante: esto es sólo el entorno virtual. Cuando hayamos activado el mismo, y siempre dentro de esa consola específica donde lo hayamos hecho, podemos trabajar en cualquier parte del sistema tal y como si en el sistema real estuviera isntalado django. Traducido al latino vulgar: que podemos crear proyectos de django en nuestro directorio de trabajo de git, aprovechando por lo tanto el control de versiones, sin que hayamos tenido que instalar django a nivel global.
+
+
+Mas info:
+[https://www.howtoforge.com/tutorial/django-install-ubuntu-14.04/]
+[https://docs.djangoproject.com/en/1.8/intro/install/]
+[https://docs.djangoproject.com/en/1.8/topics/install/#installing-official-release]
+[https://virtualenv.pypa.io/en/latest/installation.html]

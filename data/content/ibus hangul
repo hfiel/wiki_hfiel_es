@@ -1,0 +1,5 @@
+apt-get install ibus-hangul ttf-baekmuk
+
+ibus-daemon -drx
+
+ibus-setup

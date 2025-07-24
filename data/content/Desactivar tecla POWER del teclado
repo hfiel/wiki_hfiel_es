@@ -1,0 +1,54 @@
+**Importante: ojito con esto, puedes desconfigurar por completo tu teclado, y la modificación afecta a todo el sistema, da igual que teclado enchufes.**
+
+!AUN EN PRUEBAS
+No termino de lograr que funcione en mi teclado Logitech, pero hace bastante tiempo llegué a conseguirlo (pero no anoté como, aún no tenía este wiki), así que sé que se puede.
+
+!!Desactivar la tecla power
+En los actuales teclados multimedia, entre las numerosas teclas que aparecen suele haber una tecla Power, que al pulsarla apaga inmediatamente el equipo.
+
+Para desactivarla, podemos utilizar el registro para remapear dicha tecla a otra funcion, o como en el ejemplo a continuación, desactivarla por completo.
+
+* Abrimos el editor de registro y nos vamos a la rama:
+
+ HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout
+
+\'\'Nota: si en lugar de en HKEY_LOCAL_MACHINE lo haces en HKEY_CURRENT_USER la modificación sólo se aplica al usuario actual, no a todos los de la máquina.\'\'
+
+* Creamos una nueva clave binaria y escribimos lo siguiente:
+
+ 00 00 00 00 00 00 00 00 02 00 00 00 00 00 5E E0 00 00 00 00
+
+Listo, a partir de ese momento la tecla Power no deberia hacer nada. Se puede hacer lo mismo con cualquier otra(s) tecla(s), para saber más mira en los enlaces más abajo.
+
+\'\'Nota: si, ya se que esto mismo (desactivar las teclas de energía) se puede hacer desde el panel de control, en las opciones de energía...¿pero que gracia tiene tomar el camino sencillo cuando puedes complicarte la vida durante horas?\'\'
+
+
+!!La secuencia anterior explicada
+\'\'Nota: la secuencia está en hexadecimal, y los bytes se tienen que leer al reves de como aparecen, es decir, de derecha a izquierda.\'\'
+* **00 00 00 00** Cabecera, número de version. Todo ceros.
+
+* **00 00 00 00** Cabecera, flags. Todo ceros.
+
+* **02 00 00 00** Contador, nº de entradas que van a aparecer (0x0002, incluyendo la nula final que termina la secuencia)
+
+* **00 00 5E E0** Remapeo de la tecla power: 0xE050 es el código de la tecla power, 0x0000 indica que no haga nada (puedes usar el código de otra tecla en lugar de desactivarla, por ejemplo control de volumen).
+
+* **00 00 00 00** Secuencia final de cierre, todo ceros.
+
+!!Desactivar las teclas power, sleep y wake-up
+La secuencia para desactivar las tres teclas de administración de energía sería:
+
+ 00 00 00 00 00 00 00 00 04 00 00 00 00 00 5E E0 00 00 5F E0 00 00 63 E0 00 00 00 00
+
+Donde: 0xE05F es la tecla sleep y 0xE063 la tecla wake-up
+
+!!Para los que quieren el camino fácil
+Utilidad para remapear las teclas [http://www.howtogeek.com/howto/windows-vista/map-any-key-to-any-key-on-windows-xp-vista/]
+
+
+!!Más datos y códigos de teclas:
+**Recuerda**: si quieres modificar más teclas, debes cambiar el contador que indica cuantas estás modificando, y siempre incluir la secuencia final 00 00 00 00 (y acordarte de incluirla también en el contador)
+
+[http://smallvoid.com/article/winnt-scancode-map.html]
+[http://www.usnetizen.com/fix_capslock.php]
+Muchísima información sobre teclados y scancodes: [http://homepages.cwi.nl/~aeb/linux/kbd/scancodes.html]

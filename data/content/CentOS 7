@@ -1,0 +1,52 @@
+!Configurar la red en CentOS 7 minimal tras la instalacion.
+
+(via http://lintut.com/how-to-setup-network-after-rhelcentos-7-minimal-installation/)
+
+
+* Buscamos el nombre de nuestra interfaz de red con :: nmcli d ::
+
+* Arrancamos la interfaz de texto de NetworkManager con :: nmtui ::
+
+* Hacemos los cambios necesarios
+
+* Reiniciamos la red con :: service network restart ::
+
+
+
+!Desactivar firewall o agregar una regla
+
+Si el firewall (firewalld) está activo y hay que desactivarlo:
+
+:: sudo systemctl stop firewalld ::
+:: sudo systemctl disable firewall ::
+
+Si quieres simplemente agregar una regla para permitir el tráfico hacia el puerto 80:
+
+:: sudo firewall-cmd --permanent --zone=public --add-service=http ::
+
+
+!Desactivar SElinux o ponerlo en modo permisivo
+
+De manera predeterminada SElinux viene activado en CentOS 7. Esto puede provocarte problemas (por ejemplo, si estableces una carpeta propia para servir con el apache).
+
+Para desactivarlo de manera definitiva:
+
+* Editamos el fichero :: /etc/selinux/config ::
+
+* Cambiamos la línea :: SELINUX=enforcing ::
+
+* Si queremos desactivarlo por completo, indicamos :: disabled ::.
+
+* Si simplemente queremos ponerlo en modo permisivo (con lo que no bloqueará nada, pero registrará todo lo que le afecte), ponemos :: permissive ::.
+
+* Es necesario reiniciar el sistema tras cambiar la configuración
+
+!Desactivar altavoz interno
+Para desactivar el pitido del altavoz interno cuando introducimos un comando que no existe o similar:
+
+ echo 'set bell-style none' >> ~/.inputrc
+
+
+
+!Añadir alias a la interfaz de red
+https://www.ubiquityhosting.com/blog/configure-ip-ranges-on-centos-7-redhat-7/

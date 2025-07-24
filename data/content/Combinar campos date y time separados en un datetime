@@ -1,0 +1,13 @@
+Si necesitas combinar dos campos de fecha y hora separados (de tipo \'\'date\'\' y \'\'time\'\') en un único campo de formato \'\'datetime\'\', puedes hacer lo siguiente:
+
+::UPDATE Tabla::
+::SET fechahora = CONCAT(`fecha`, \' \', `hora`)::
+
+Donde:
+* \'\'Tabla\'\' es la tabla a modificar
+* \'\'fechahora\'\' es el campo \'\'datetime\'\'
+* \'\'fecha\'\' es el campo \'\'date\'\'
+* \'\'hora\'\' es el campo \'\'hora\'\'
+
+
+VIA: [http://www.fusioncoder.com/mysql-combine-date-and-time-fields.htm]

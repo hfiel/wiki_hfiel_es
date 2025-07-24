@@ -1,0 +1,10 @@
+Para instalar la version de headers específica para el kernel existente:
+
+ $ sudo apt-get install linux-headers-$(uname -r)
+
+
+Para poder usar el module-assistant para recompilar:
+
+ $ sudo apt-get install build-essential module-assistant
+ $ sudo m-a prepare
+ $ sudo m-a update

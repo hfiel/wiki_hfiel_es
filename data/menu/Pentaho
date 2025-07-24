@@ -1,0 +1,40 @@
+Cuando cambiamos de HSQLDB a MySQL, una de las tareas es cambiar la configuración de la cadena de conexion del servidor por jdbc. Entre otros ficheros, hay que cambiar los relativos a la seguridad (control de accesos)
+
+En las versiones antiguas habia ficheros acegi, PE: applicationContext-acegi-security-jdbc.xml
+
+En las actuales, son ficheros spring:
+
+applicationContext-spring-security-jdbc.xml
+
+
+En el script de creacion de sampledata para mysql5, hay que cambiar 2 cosas:
+
+primero, los timestams, hay que cambiar todas las apariciones de 
+
+00.000000000
+
+con 
+
+00.000000
+
+
+Luego hay que modificar el tipo de datos AMOUNT de la tabla PAYMENTS, que viene como
+
+
+decimal(17,0)
+
+por
+
+decimal(17,2)
+
+para evitar que se trunquen los decimales.
+
+
+
+
+para deshabilitar las bbdd HSQLDB que vienen (una vez que tenemos las mysql listas), hay que comentar algunas lineas en 
+
+webapps/pentaho/WEB-INF/web.xml
+
+
+para mas datos: http://stackoverflow.com/questions/11655829/how-to-stop-pentaho-pac-from-searching-non-existant-hsqldb-instance

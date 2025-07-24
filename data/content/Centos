@@ -1,0 +1,55 @@
+* CHULETA INSTALACION MINIMA
+
+* Completar instalacion minima
+* Configurar la red:
+::$ vim /etc/sysconfig/network-scripts/ifcfg-eth0::
+
+::DEVICE=eth0::
+::HWADDR=XX:XX:XX.....::
+::TYPE=Ethernet::
+::UUID=XXXXXX-XXXX.....::
+::ONBOOT=yes::
+::NM_CONTROLLED=yes::
+::BOOTPROTO=none::
+::NETWORK=192.168.1.0::
+::NETMASK=255.255.255.0::
+::IPADDR=192.168.1.21::
+::GATEWAY=192.168.1.1::
+::DNS1=8.8.8.8::
+::DNS2=8.8.4.4::
+::USERCTL=no::
+
+para ver las opciones: [http://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-networkscripts-interfaces.html]
+
+* Reiniciar la red
+
+::service networking restart::
+
+* montar el cdrom de instalacion
+::mkdir /media/cdrom::
+
+::mount /dev/cdrom /media/cdrom::
+
+* cambiar el repo para que tire del cd
+
+::vi /etc/yum.repos.d/CentOS-Media.repo::
+
+Anota el nombre del repo (deberia ser cX-media, donde X es la version, PE c6-media)
+
+Modificar ::enabled=1:: y guardar
+
+* instalamos cosas basicas que faltan (usando el repo del cd)
+:: yum --enablerepo=c6-media install XXXXXXX::
+
+donde XXXXXX será (puedes poner varios separados por espacio):
+::perl::
+::wget::
+::vim-enhanced::
+::bind-utils::
+::man::
+::man-pages::
+::man-pages-overrides::
+::ntp::
+
+
+y si quieres muchos mas de golpe: ::groupinstall base::
